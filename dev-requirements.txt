@@ -1,8 +1,9 @@
 # This file contains all the development requirements for our linting toolchain.
-# Don't forget to pin your dependencies!
-# This list will have to be migrated if you wish to use another dependency manager.
+# Run:
+# pip install -r dev-requirements.txt
 
 # Base tools
+black~=21.6b0
 flake8~=3.7
 isort~=5.9
 pre-commit~=2.13.0

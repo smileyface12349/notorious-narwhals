@@ -1,8 +1,5 @@
 ## Pre-commit setup
 # See https://github.com/python-discord/code-jam-template/tree/main#pre-commit-run-linting-before-committing
-#
-# Please uncomment the right lines depending on your setup.
-
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.5.0
@@ -16,21 +13,29 @@ repos:
     rev: v1.5.1
     hooks:
       - id: python-check-blanket-noqa
-  - repo: local
+  - repo: https://github.com/psf/black
+    rev: 21.6b0
+    hooks:
+      - id: black
+        name: black
+        # entry: python -m black .
+        types: [python]
+        require_serial: true
+
+  - repo: https://github.com/timothycrosley/isort
+    rev: 5.9.0
     hooks:
       - id: isort
         name: ISort
-        entry: python -m isort .  # Default Env setup
-        # entry: pipenv run python -m isort .  # Pipenv setup
-        # entry: poetry run python -m isort .  # Poetry setup
-        language: system
+        # entry: python -m isort .
         types: [python]
         require_serial: true
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.7.0
+    hooks:
       - id: flake8
         name: Flake8
-        entry: python -m flake8  # Default Env setup
-        # entry: pipenv run python -m flake8  # Pipenv setup
-        # entry: poetry run python -m flake8  # Poetry setup
-        language: system
+        # entry: python -m flake8
         types: [python]
         require_serial: true
