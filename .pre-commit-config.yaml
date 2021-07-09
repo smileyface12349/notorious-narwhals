@@ -13,23 +13,29 @@ repos:
     rev: v1.5.1
     hooks:
       - id: python-check-blanket-noqa
-  - repo: local
+  - repo: https://github.com/psf/black
+    rev: 21.6b0
     hooks:
       - id: black
         name: black
-        entry: python -m black .
-        language: system
+        # entry: python -m black .
         types: [python]
         require_serial: true
+
+  - repo: https://github.com/timothycrosley/isort
+    rev: 5.9.0
+    hooks:
       - id: isort
         name: ISort
-        entry: python -m isort .
-        language: system
+        # entry: python -m isort .
         types: [python]
         require_serial: true
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.7.0
+    hooks:
       - id: flake8
         name: Flake8
-        entry: python -m flake8
-        language: system
+        # entry: python -m flake8
         types: [python]
         require_serial: true
