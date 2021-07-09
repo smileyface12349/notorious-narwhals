@@ -54,21 +54,3 @@ jobs:
         env:
           # Force pre-commit to do a system install.
           PIP_USER: 0
-
-        # Pipenv setup
-        # - name: Run hooks through our Pipenv environment.
-        #  run: |
-        #    pipenv install --system --dev
-        #    pipenv run python -m pre-commit run --all-files
-        #  env:
-        #    # Force pre-commit to do a system install.
-        #    PIP_USER: 0
-
-        # Poetry setup
-        # - name: Run hooks through our Poetry environment.
-        #  run: |
-        #    poetry install
-        #    poetry run python -m pre-commit run --all-files
-        #  env:
-        #    # Force pre-commit to do a system install.
-        #    PIP_USER: 0
