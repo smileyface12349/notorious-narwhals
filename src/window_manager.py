@@ -106,43 +106,34 @@ class WindowManager(ABC):
         self.previous_rect = self.current_rect
         self.current_rect = self._get_window_rect()
 
-    def _check_constraints(self):
-        pass
-        # size_changed = False
-        # size = tuple(self.size)
-        #
-        # if self.min_size and any(map(operator.lt, size, self.min_size)):
-        #     size_changed = True
-        #     size = tuple(map(max, size, self.min_size))
-        #
-        # if self.max_size and any(map(operator.gt, size, self.max_size)):
-        #     size_changed = True
-        #     size = tuple(map(min, size, self.max_size))
-        #
-        # pos_changed = False
-        # pos = tuple(self.position)
-        #
-        # if self.min_pos and any(map(operator.lt, pos, self.min_pos)):
-        #     pos_changed = True
-        #     size = tuple(map(max, pos, self.min_pos))
-        #
-        # if self.max_pos and any(map(operator.gt, pos, self.max_pos)):
-        #     pos_changed = True
-        #     size = tuple(map(min, pos, self.max_pos))
+        # Resize window to fit constraints
+        constrained_rect = self._fit_constraints(self.current_rect)
+        if self.current_rect != constrained_rect:
+            self.set_window_rect(constrained_rect)
 
-        # TODO
+    def _fit_constraints(self, rect):
+        size = self.get_size(rect)
+        if self.min_size and any(map(operator.lt, size, self.min_size)):
+            size = tuple(map(max, size, self.min_size))
+        if self.max_size and any(map(operator.gt, size, self.max_size)):
+            size = tuple(map(min, size, self.max_size))
 
-        # if size_changed or pos_changed:
-        #     pass
+        pos = self.get_position(rect)
+        if self.min_pos and any(map(operator.lt, pos, self.min_pos)):
+            pos = tuple(map(max, pos, self.min_pos))
+        if self.max_pos and any(map(operator.gt, pos, self.max_pos)):
+            pos = tuple(map(min, pos, self.max_pos))
+
+        return Rectangle(*pos, *map(operator.add, pos, size))
 
     def set_window_rect(self, rect: Rectangle):
         """
-        Sets window rectangle coordinates to passed rect, adhering to specified in attributes constrains
+        Sets window rectangle coordinates to passed rect, adhering to specified in attributes constraints
         For clarity it's better if this method is called no more than once per frame, after everything else
         """
-        # todo _check_constraints
-        self._set_window_rect(rect)
-        self.current_rect = rect
+        constrained_rect = self._fit_constraints(rect)
+        self._set_window_rect(constrained_rect)
+        self.current_rect = constrained_rect
 
     @abstractmethod
     def _get_window_rect(self) -> Rectangle:
