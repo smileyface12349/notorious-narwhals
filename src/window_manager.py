@@ -3,10 +3,7 @@ from abc import ABC, abstractmethod
 from collections import namedtuple
 from typing import Optional
 
-Position = namedtuple("Position", ["x", "y"])
-Size = namedtuple("Size", ["width", "height"])
-Rectangle = namedtuple("Rectangle", ["x1", "y1", "x2", "y2"])
-Corners = namedtuple("Corners", ["top", "bottom", "left", "right"])
+from datatypes import Corners, Position, Rectangle, Size
 
 
 class WindowManager(ABC):
