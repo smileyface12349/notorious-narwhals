@@ -21,3 +21,25 @@ class BoxState:
     def add_object(self, added_object) -> NoReturn:
         """Adds an object to the objects list"""
         self.objects.append(added_object)
+
+    def render(self, screen: curses.window) -> NoReturn:
+        """Renders the contents of the box"""
+        if len(self.objects) == 0:
+            return  # There is nothing to render!
+
+        for obj in sorted(self.objects, key=lambda x: x.z):  # Sorts objects by their Z depth
+            if obj.override_colors:  # If the object decides to override default property-based colors:
+                curses.init_pair(100, *obj.color)
+                color = curses.color_pair(100)
+            else:
+                # We're sorting if statements by importance. An object being bouncy is the most important,
+                # therefore we're making it the top if statement.
+
+                if obj.elasticity >= 0.6:  # If the object is bouncy
+                    color = curses.color_pair(4)
+                elif obj.friction == 1:  # If an object has a friction of 1, it's sticky.
+                    color = curses.color_pair(2)
+                elif obj.friction <= 0.3:
+                    color = curses.color_pair(3)
+                else:  # If it's just a regular ol' object.
+                    color = curses.color_pair(1)
