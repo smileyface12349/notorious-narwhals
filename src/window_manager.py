@@ -1,11 +1,26 @@
 import operator
+import platform
 from abc import ABC, abstractmethod
 from typing import Optional
 
 from datatypes import Corners, Position, Rectangle, Size
 
+current_platform = platform.system()
 
-class WindowManager(ABC):
+if current_platform == "Windows":
+    import win32console
+    import win32gui
+elif current_platform == "Linux":
+    pass
+    # import linux specific modules
+elif current_platform == "Darwin":
+    # import linux specific modules
+    pass
+else:
+    raise RuntimeError("OS is not supported")
+
+
+class AbstractWindowManager(ABC):
     """Class to get and manage window position and size, as well as movement and resizing"""
 
     def __init__(self):
@@ -151,3 +166,17 @@ class WindowManager(ABC):
     # @abstractmethod
     # def maximize_window(self):
     #     ...
+
+
+class Win32WindowManager(AbstractWindowManager):
+    def __init__(self):
+        super().__init__()
+        self.hwnd = win32console.GetConsoleWindow()
+
+    def _get_window_rect(self) -> Rectangle:
+        rect = win32gui.GetWindowRect(self.hwnd)
+        return Rectangle(*rect)
+
+    def _set_window_rect(self, rect: Rectangle):
+        hwnd = win32console.GetConsoleWindow()
+        win32gui.MoveWindow(hwnd, *self.get_position(rect), *self.get_size(rect), True)
