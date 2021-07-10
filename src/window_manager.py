@@ -1,6 +1,5 @@
 import operator
 from abc import ABC, abstractmethod
-from collections import namedtuple
 from typing import Optional
 
 from datatypes import Corners, Position, Rectangle, Size
