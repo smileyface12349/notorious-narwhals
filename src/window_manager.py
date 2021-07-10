@@ -31,7 +31,7 @@ class WindowManager(ABC):
         """Extracts size (width, height) from rectangle coordinates"""
         x1, y1, x2, y2 = rect
         width = x2 - x1
-        height = y2 - x1
+        height = y2 - y1
         return Size(width, height)
 
     @property
