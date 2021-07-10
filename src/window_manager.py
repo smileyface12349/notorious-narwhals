@@ -180,3 +180,10 @@ class Win32WindowManager(AbstractWindowManager):
     def _set_window_rect(self, rect: Rectangle):
         hwnd = win32console.GetConsoleWindow()
         win32gui.MoveWindow(hwnd, *self.get_position(rect), *self.get_size(rect), True)
+
+
+window_managers = {
+    "Windows": Win32WindowManager,
+}
+
+WindowManager = window_managers[current_platform]  # import this name to get window manager for current platform!
