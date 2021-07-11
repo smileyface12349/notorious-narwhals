@@ -14,8 +14,7 @@ elif current_platform == "Linux":
     pass
     # import linux specific modules
 elif current_platform == "Darwin":
-    # import linux specific modules
-    pass
+    import applescript
 else:
     raise RuntimeError("OS is not supported")
 
@@ -182,8 +181,22 @@ class Win32WindowManager(AbstractWindowManager):
         win32gui.MoveWindow(hwnd, *self.get_position(rect), *self.get_size(rect), True)
 
 
+class DarwinWindowManager(AbstractWindowManager):
+    def __init__(self):
+        super().__init__()
+
+    def _get_window_rect(self) -> Rectangle:
+        rect = applescript.run('tell application "Terminal" to get the bounds of the front window').out.split(", ")
+        return Rectangle(*rect)
+
+    def _set_window_rect(self, rect: Rectangle):
+        rect_str = ", ".join(map(str, [rect.x1, rect.y1, rect.x2, rect.y2]))
+        applescript.run('tell application "Terminal" to set the bounds of the front window to {' + rect_str + "}")
+
+
 window_managers = {
     "Windows": Win32WindowManager,
+    "Darwin": DarwinWindowManager,
 }
 
 WindowManager = window_managers[current_platform]  # import this name to get window manager for current platform!
