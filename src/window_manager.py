@@ -12,12 +12,9 @@ if current_platform == "Windows":
     import win32gui
 elif current_platform == "Linux":
     from Xlib.display import Display
-    from Xlib.xobject.drawable import Window
-
-    # import linux specific modules
+    from Xlib.xobject.drawable import Window    
 elif current_platform == "Darwin":
-    # import linux specific modules
-    pass
+    import applescript
 else:
     raise RuntimeError("OS is not supported")
 
@@ -183,7 +180,19 @@ class Win32WindowManager(AbstractWindowManager):
         hwnd = win32console.GetConsoleWindow()
         win32gui.MoveWindow(hwnd, *self.get_position(rect), *self.get_size(rect), True)
 
+class DarwinWindowManager(AbstractWindowManager):
+    def __init__(self):
+        super().__init__()
 
+    def _get_window_rect(self) -> Rectangle:
+        rect = applescript.run('tell application "Terminal" to get the bounds of the front window').out.split(", ")
+        rect_int = map(int, rect)
+        return Rectangle(*rect_int)
+
+    def _set_window_rect(self, rect: Rectangle):
+        rect_str = ", ".join(map(str, [rect.x1, rect.y1, rect.x2, rect.y2]))
+        applescript.run('tell application "Terminal" to set the bounds of the front window to {' + rect_str + "}")
+        
 class X11WindowManager(AbstractWindowManager):
     def __init__(self):
         super().__init__()
@@ -212,6 +221,7 @@ class X11WindowManager(AbstractWindowManager):
 
 window_managers = {
     "Windows": Win32WindowManager,
+    "Darwin": DarwinWindowManager,
     "Linux": X11WindowManager,
 }
 
