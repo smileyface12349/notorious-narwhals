@@ -9,10 +9,12 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
+
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.5.1
     hooks:
       - id: python-check-blanket-noqa
+
   - repo: https://github.com/psf/black
     rev: 21.6b0
     hooks:
@@ -22,20 +24,17 @@ repos:
         types: [python]
         require_serial: true
 
-  - repo: https://github.com/timothycrosley/isort
-    rev: 5.9.0
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.9.2
     hooks:
       - id: isort
-        name: ISort
-        # entry: python -m isort .
-        types: [python]
-        require_serial: true
 
-  - repo: https://gitlab.com/pycqa/flake8
-    rev: 3.7.0
+  - repo: https://github.com/pycqa/flake8
+    rev: 3.9.2
     hooks:
       - id: flake8
-        name: Flake8
-        # entry: python -m flake8
-        types: [python]
-        require_serial: true
+        additional_dependencies:
+          - flake8-annotations~=2.0
+          - flake8-bandit~=2.1
+          - flake8-docstrings~=1.5
+          - flake8-isort~=4.0
