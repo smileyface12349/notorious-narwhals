@@ -3,7 +3,7 @@ import platform
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from datatypes import Corners, Position, Rectangle, Size
+from datatypes import Edges, Position, Rectangle, Size
 
 current_platform = platform.system()
 
@@ -69,9 +69,9 @@ class AbstractWindowManager(ABC):
         return Rectangle(*map(operator.sub, self.current_rect, self.previous_rect))
 
     @property
-    def translated_corners_by(self) -> Corners:
+    def translated_corners_by(self) -> Edges:
         """Same as rect_diff, but with clearer attributes in namedtuple"""
-        return Corners(*self.rect_diff)
+        return Edges(*self.rect_diff)
 
     @property
     def translated_by(self) -> Position:
