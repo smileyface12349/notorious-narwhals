@@ -11,6 +11,7 @@ if current_platform == "Windows":
     import win32console
     import win32gui
 elif current_platform == "Linux":
+    from Xlib import X
     from Xlib.display import Display
     from Xlib.xobject.drawable import Window
 elif current_platform == "Darwin":
@@ -208,15 +209,13 @@ class X11WindowManager(AbstractWindowManager):
         super().__init__()
         self.display = Display()
         self.root = self.display.screen().root
-        self.NET_ACTIVE_WINDOW = self.display.intern_atom("_NET_ACTIVE_WINDOW")
-        self.active = self.display.get_input_focus().focus
-        self.window = []
-        while self.active.id != self.root.id:
-            self.active = self.active.query_tree().parent
-            self.window.append(self.active)
+        self.window_id = self.root.get_full_property(
+            self.display.intern_atom("_NET_ACTIVE_WINDOW"), X.AnyPropertyType
+        ).value[0]
+        self.window = self.display.create_resource_object("window", self.window_id)
 
     def _get_window_rect(self) -> Rectangle:
-        geometry = Window.get_geometry(self.window[1])._data
+        geometry = Window.get_geometry(self.window.query_tree().parent)._data
         rect = (
             geometry.get("x"),
             geometry.get("y"),
@@ -226,7 +225,8 @@ class X11WindowManager(AbstractWindowManager):
         return Rectangle(*rect)
 
     def _set_window_rect(self, rect: Rectangle) -> None:
-        pass
+        self.window.configure(x=rect.x1, y=rect.y1, width=(rect.x2 - rect.x1), height=(rect.y2 - rect.y1))
+        self.display.sync()
 
 
 window_managers = {
