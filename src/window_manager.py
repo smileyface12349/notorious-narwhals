@@ -102,7 +102,7 @@ class AbstractWindowManager(ABC):
         return self.scaled_by != (0, 0)
 
     @property
-    def changed(self) -> bool:
+    def was_changed(self) -> bool:
         """Whether the window was moved or resized relative to previous frame"""
         return self.was_moved or self.was_resized
 
