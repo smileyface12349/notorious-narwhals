@@ -12,7 +12,7 @@ if current_platform == "Windows":
     import win32gui
 elif current_platform == "Linux":
     from Xlib.display import Display
-    from Xlib.xobject.drawable import Window    
+    from Xlib.xobject.drawable import Window
 elif current_platform == "Darwin":
     import applescript
 else:
@@ -180,6 +180,7 @@ class Win32WindowManager(AbstractWindowManager):
         hwnd = win32console.GetConsoleWindow()
         win32gui.MoveWindow(hwnd, *self.get_position(rect), *self.get_size(rect), True)
 
+
 class DarwinWindowManager(AbstractWindowManager):
     def __init__(self):
         super().__init__()
@@ -192,7 +193,8 @@ class DarwinWindowManager(AbstractWindowManager):
     def _set_window_rect(self, rect: Rectangle):
         rect_str = ", ".join(map(str, [rect.x1, rect.y1, rect.x2, rect.y2]))
         applescript.run('tell application "Terminal" to set the bounds of the front window to {' + rect_str + "}")
-        
+
+
 class X11WindowManager(AbstractWindowManager):
     def __init__(self):
         super().__init__()
