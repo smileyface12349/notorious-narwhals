@@ -11,7 +11,9 @@ if current_platform == "Windows":
     import win32console
     import win32gui
 elif current_platform == "Linux":
-    pass
+    from Xlib.display import Display
+    from Xlib.xobject.drawable import Window
+
     # import linux specific modules
 elif current_platform == "Darwin":
     # import linux specific modules
@@ -182,8 +184,35 @@ class Win32WindowManager(AbstractWindowManager):
         win32gui.MoveWindow(hwnd, *self.get_position(rect), *self.get_size(rect), True)
 
 
+class X11WindowManager(AbstractWindowManager):
+    def __init__(self):
+        super().__init__()
+        self.display = Display()
+        self.root = self.display.screen().root
+        self.NET_ACTIVE_WINDOW = self.display.intern_atom("_NET_ACTIVE_WINDOW")
+        self.active = self.display.get_input_focus().focus
+        self.window = []
+        while self.active.id != self.root.id:
+            self.active = self.active.query_tree().parent
+            self.window.append(self.active)
+
+    def _get_window_rect(self):
+        geometry = Window.get_geometry(self.window[1])._data
+        rect = (
+            geometry.get("x"),
+            geometry.get("y"),
+            geometry.get("width") + geometry.get("x"),
+            geometry.get("height") + geometry.get("y"),
+        )
+        return Rectangle(*rect)
+
+    def _set_window_rect(self, rect: Rectangle):
+        pass
+
+
 window_managers = {
     "Windows": Win32WindowManager,
+    "Linux": X11WindowManager,
 }
 
 WindowManager = window_managers[current_platform]  # import this name to get window manager for current platform!
