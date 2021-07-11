@@ -41,8 +41,8 @@ class BoxState:
 
         for x in range(obj.size[0]):
             for y in range(obj.size[1]):
-                draw_pos_x = obj.position[0] + x
-                draw_pos_y = obj.position[1] + y
+                draw_pos_x = round(obj.position[0]) + x
+                draw_pos_y = round(obj.position[1]) + y
 
                 # Giant if statement to decide if we should draw the tile
                 if (draw_pos_x >= 0 and draw_pos_x < screen.getmaxyx()[1]) and (
