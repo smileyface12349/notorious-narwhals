@@ -49,40 +49,41 @@ class AbstractWindowManager(ABC):
         return Size(width, height)
 
     @property
-    def position(self) -> tuple[int, int]:
+    def position(self) -> Position:
         """Position (x, y) of the window on current frame (upper left corner)"""
         return self.get_position(self.current_rect)
 
     @property
-    def size(self) -> tuple[int, int]:
+    def size(self) -> Size:
         """Size (width, height) of the window on current frame"""
         return self.get_size(self.current_rect)
 
     @property
-    def rect_diff(self) -> tuple[int, int, int, int]:
+    def rect_diff(self) -> Rectangle:
         """
         Difference between current and previous rectangle coordinates of the window.
-        Use translated_corners_by for clearer attributes
+
+        Use translated_corners_by for clearer attributes.
         """
         return Rectangle(*map(operator.sub, self.current_rect, self.previous_rect))
 
     @property
-    def translated_corners_by(self):
+    def translated_corners_by(self) -> Corners:
         """Same as rect_diff, but with clearer attributes in namedtuple"""
         return Corners(*self.rect_diff)
 
     @property
-    def translated_by(self):
+    def translated_by(self) -> Position:
         """Difference between current and previous position of the window (upper left corner)"""
         return self.get_position(self.rect_diff)
 
     @property
-    def scaled_by(self):
+    def scaled_by(self) -> Size:
         """Difference between current and previous size of the window (in pixels)"""
         return self.get_size(self.rect_diff)
 
     @property
-    def scaled_by_relative(self) -> Size[float, float]:
+    def scaled_by_relative(self) -> Size:
         """Difference between current and previous size of the window (as ratios)"""
         width_current, height_current = self.get_size(self.current_rect)
         width_previous, height_previous = self.get_size(self.previous_rect)
@@ -104,8 +105,9 @@ class AbstractWindowManager(ABC):
         """Whether the window was moved or resized relative to previous frame"""
         return self.was_moved or self.was_resized
 
-    def update(self):
-        """
+    def update(self) -> None:
+        """Updates
+
         Updates current_rect and previous_rect attributes (!)
         Updates window size/position if user changed it past specified constrains
 
@@ -121,7 +123,7 @@ class AbstractWindowManager(ABC):
         if self.current_rect != constrained_rect:
             self.set_window_rect(constrained_rect)
 
-    def _fit_constraints(self, rect):
+    def _fit_constraints(self, rect: Rectangle) -> Rectangle:
         size = self.get_size(rect)
         if self.min_size and any(map(operator.lt, size, self.min_size)):
             size = tuple(map(max, size, self.min_size))
@@ -136,8 +138,9 @@ class AbstractWindowManager(ABC):
 
         return Rectangle(*pos, *map(operator.add, pos, size))
 
-    def set_window_rect(self, rect: Rectangle):
-        """
+    def set_window_rect(self, rect: Rectangle) -> None:
+        """Sets window rectangle coordinates
+
         Sets window rectangle coordinates to passed rect, adhering to specified in attributes constraints
         For clarity it's better if this method is called no more than once per frame, after everything else
         """
@@ -147,18 +150,17 @@ class AbstractWindowManager(ABC):
 
     @abstractmethod
     def _get_window_rect(self) -> Rectangle:
-        """
-        OS - specific implementation of calls
-        to get window position and size to specific coordinates
-        """
+        """Get window position and size as coordinates
 
+        OS - specific implementation of calls
+        """
         ...
 
     @abstractmethod
-    def _set_window_rect(self, rect: Rectangle):
-        """
+    def _set_window_rect(self, rect: Rectangle) -> None:
+        """Set window position and size to coordinates
+
         OS - specific implementation of calls
-        to set window position and size to specific coordinates
         """
         ...
 
@@ -168,6 +170,8 @@ class AbstractWindowManager(ABC):
 
 
 class Win32WindowManager(AbstractWindowManager):
+    """Window manager class for Win32"""
+
     def __init__(self):
         super().__init__()
         self.hwnd = win32console.GetConsoleWindow()
@@ -176,12 +180,14 @@ class Win32WindowManager(AbstractWindowManager):
         rect = win32gui.GetWindowRect(self.hwnd)
         return Rectangle(*rect)
 
-    def _set_window_rect(self, rect: Rectangle):
+    def _set_window_rect(self, rect: Rectangle) -> None:
         hwnd = win32console.GetConsoleWindow()
         win32gui.MoveWindow(hwnd, *self.get_position(rect), *self.get_size(rect), True)
 
 
 class DarwinWindowManager(AbstractWindowManager):
+    """Window manager class for Darwin"""
+
     def __init__(self):
         super().__init__()
 
@@ -190,12 +196,14 @@ class DarwinWindowManager(AbstractWindowManager):
         rect_int = map(int, rect)
         return Rectangle(*rect_int)
 
-    def _set_window_rect(self, rect: Rectangle):
+    def _set_window_rect(self, rect: Rectangle) -> None:
         rect_str = ", ".join(map(str, [rect.x1, rect.y1, rect.x2, rect.y2]))
         applescript.run('tell application "Terminal" to set the bounds of the front window to {' + rect_str + "}")
 
 
 class X11WindowManager(AbstractWindowManager):
+    """Window manager class for X11"""
+
     def __init__(self):
         super().__init__()
         self.display = Display()
@@ -207,7 +215,7 @@ class X11WindowManager(AbstractWindowManager):
             self.active = self.active.query_tree().parent
             self.window.append(self.active)
 
-    def _get_window_rect(self):
+    def _get_window_rect(self) -> Rectangle:
         geometry = Window.get_geometry(self.window[1])._data
         rect = (
             geometry.get("x"),
@@ -217,7 +225,7 @@ class X11WindowManager(AbstractWindowManager):
         )
         return Rectangle(*rect)
 
-    def _set_window_rect(self, rect: Rectangle):
+    def _set_window_rect(self, rect: Rectangle) -> None:
         pass
 
 
