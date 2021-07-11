@@ -187,7 +187,8 @@ class DarwinWindowManager(AbstractWindowManager):
 
     def _get_window_rect(self) -> Rectangle:
         rect = applescript.run('tell application "Terminal" to get the bounds of the front window').out.split(", ")
-        return Rectangle(*rect)
+        rect_int = map(int, rect)
+        return Rectangle(*rect_int)
 
     def _set_window_rect(self, rect: Rectangle):
         rect_str = ", ".join(map(str, [rect.x1, rect.y1, rect.x2, rect.y2]))
