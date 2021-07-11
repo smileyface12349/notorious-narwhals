@@ -43,3 +43,17 @@ class BoxState:
                     color = curses.color_pair(3)
                 else:  # If it's just a regular ol' object.
                     color = curses.color_pair(1)
+
+            # Drawing stuff on the screen character-by-character
+            # It doesn't affect performance because curses draws all the stuff at once
+            # when screen.update() is called (or when .getkey() / .getch() is called)
+            for x in range(obj.size[0]):
+                for y in range(obj.size[1]):
+                    draw_pos_x = obj.position[0] + x
+                    draw_pos_y = obj.position[1] + y
+
+                    # Giant if statement to decide if we should draw the tile
+                    if (draw_pos_x >= 0 and draw_pos_x < screen.getmaxyx()[1]) and (
+                        draw_pos_y >= 0 and draw_pos_y < screen.getmaxyx()[0]
+                    ):
+                        screen.insch(draw_pos_y, draw_pos_x, "@", color)
