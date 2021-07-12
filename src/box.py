@@ -7,11 +7,14 @@ GameObject = namedtuple(
 )  # Remove when GameObject class is done
 # Import GameObject class when it is done
 
-# Defining colors based on objects` properties
-curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)  # Regular
-curses.init_pair(2, 121, curses.COLOR_BLACK)  # Sticky
-curses.init_pair(3, 111, curses.COLOR_BLACK)  # Icy (little to no friction)
-curses.init_pair(4, 228, curses.COLOR_BLACK)  # Bouncy
+
+def init_colors() -> NoReturn:
+    """Initialize colors"""
+    # Defining colors based on objects` properties
+    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)  # Regular
+    curses.init_pair(2, 121, curses.COLOR_BLACK)  # Sticky
+    curses.init_pair(3, 111, curses.COLOR_BLACK)  # Icy (little to no friction)
+    curses.init_pair(4, 228, curses.COLOR_BLACK)  # Bouncy
 
 
 class BoxState:
