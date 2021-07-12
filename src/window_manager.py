@@ -1,7 +1,7 @@
 import operator
 import platform
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import NoReturn, Optional
 
 from datatypes import Edges, Position, Rectangle, Size
 
@@ -106,7 +106,7 @@ class AbstractWindowManager(ABC):
         """Whether the window was moved or resized relative to previous frame"""
         return self.was_moved or self.was_resized
 
-    def update(self) -> None:
+    def update(self) -> NoReturn:
         """Updates
 
         Updates current_rect and previous_rect attributes (!)
@@ -139,7 +139,7 @@ class AbstractWindowManager(ABC):
 
         return Rectangle(*pos, *map(operator.add, pos, size))
 
-    def set_window_rect(self, rect: Rectangle) -> None:
+    def set_window_rect(self, rect: Rectangle) -> NoReturn:
         """Sets window rectangle coordinates
 
         Sets window rectangle coordinates to passed rect, adhering to specified in attributes constraints
@@ -158,7 +158,7 @@ class AbstractWindowManager(ABC):
         ...
 
     @abstractmethod
-    def _set_window_rect(self, rect: Rectangle) -> None:
+    def _set_window_rect(self, rect: Rectangle) -> NoReturn:
         """Set window position and size to coordinates
 
         OS - specific implementation of calls
@@ -181,7 +181,7 @@ class Win32WindowManager(AbstractWindowManager):
         rect = win32gui.GetWindowRect(self.hwnd)
         return Rectangle(*rect)
 
-    def _set_window_rect(self, rect: Rectangle) -> None:
+    def _set_window_rect(self, rect: Rectangle) -> NoReturn:
         hwnd = win32console.GetConsoleWindow()
         win32gui.MoveWindow(hwnd, *self.get_position(rect), *self.get_size(rect), True)
 
@@ -197,7 +197,7 @@ class DarwinWindowManager(AbstractWindowManager):
         rect_int = map(int, rect)
         return Rectangle(*rect_int)
 
-    def _set_window_rect(self, rect: Rectangle) -> None:
+    def _set_window_rect(self, rect: Rectangle) -> NoReturn:
         rect_str = ", ".join(map(str, [rect.x1, rect.y1, rect.x2, rect.y2]))
         applescript.run('tell application "Terminal" to set the bounds of the front window to {' + rect_str + "}")
 
@@ -224,7 +224,7 @@ class X11WindowManager(AbstractWindowManager):
         )
         return Rectangle(*rect)
 
-    def _set_window_rect(self, rect: Rectangle) -> None:
+    def _set_window_rect(self, rect: Rectangle) -> NoReturn:
         self.window.configure(x=rect.x1, y=rect.y1, width=(rect.x2 - rect.x1), height=(rect.y2 - rect.y1))
         self.display.sync()
 
