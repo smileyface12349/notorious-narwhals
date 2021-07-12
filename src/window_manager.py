@@ -122,7 +122,8 @@ class AbstractWindowManager(ABC):
         # Resize window to fit constraints
         constrained_rect = self._fit_constraints(self.current_rect)
         if self.current_rect != constrained_rect:
-            self.set_window_rect(constrained_rect)
+            self._set_window_rect(constrained_rect)
+            self.current_rect = constrained_rect
 
     def _fit_constraints(self, rect: Rectangle) -> Rectangle:
         size = self.get_size(rect)
