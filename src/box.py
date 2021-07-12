@@ -1,5 +1,11 @@
 import curses
+from collections import namedtuple  # Remove when GameObject class is done
 from typing import NoReturn
+
+GameObject = namedtuple(
+    "GameObject", ["position", "size", "color", "override_colors", "elasticity", "friction"]
+)  # Remove when GameObject class is done
+# Import GameObject class when it is done
 
 # Defining colors based on objects` properties
 curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)  # Regular
@@ -18,9 +24,9 @@ class BoxState:
         """Clears the box of all objects"""
         self.objects = []  # todo use queue or deque to keep objects z-sorted efficiently
 
-    def add_object(self, added_object) -> NoReturn:
+    def add_object(self, obj: GameObject) -> NoReturn:
         """Adds an object to the objects list"""
-        self.objects.append(added_object)
+        self.objects.append(obj)
 
     def render(self, screen: curses.window) -> NoReturn:
         """Renders the contents of the box"""
@@ -32,7 +38,7 @@ class BoxState:
 
         # screen.update() ?
 
-    def _render_object(self, obj, screen) -> NoReturn:
+    def _render_object(self, obj: GameObject, screen: curses.window) -> NoReturn:
         """Renders object on the screen (character-by-character)"""
         # Drawing stuff on the screen character-by-character
         # It doesn't affect performance because curses draws all the stuff at once
@@ -51,7 +57,7 @@ class BoxState:
                     screen.insch(draw_pos_y, draw_pos_x, "@", color)
 
     @staticmethod
-    def _get_object_color(obj) -> int:
+    def _get_object_color(obj: GameObject) -> int:
         """"""
         if obj.override_colors:  # If the object decides to override default property-based colors:
             curses.init_pair(100, *obj.color)
