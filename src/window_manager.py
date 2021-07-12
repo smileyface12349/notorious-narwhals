@@ -190,9 +190,6 @@ class Win32WindowManager(AbstractWindowManager):
 class DarwinWindowManager(AbstractWindowManager):
     """Window manager class for Darwin"""
 
-    def __init__(self):
-        super().__init__()
-
     def _get_window_rect(self) -> Rectangle:
         rect = applescript.run('tell application "Terminal" to get the bounds of the front window').out.split(", ")
         rect_int = map(int, rect)
