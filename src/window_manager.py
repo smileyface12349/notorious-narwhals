@@ -166,10 +166,6 @@ class AbstractWindowManager(ABC):
         """
         ...
 
-    # @abstractmethod
-    # def maximize_window(self):
-    #     ...
-
 
 class Win32WindowManager(AbstractWindowManager):
     """Window manager class for Win32"""
