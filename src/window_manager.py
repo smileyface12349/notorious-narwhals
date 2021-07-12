@@ -69,7 +69,7 @@ class AbstractWindowManager(ABC):
         return Rectangle(*map(operator.sub, self.current_rect, self.previous_rect))
 
     @property
-    def translated_corners_by(self) -> Edges:
+    def translated_edges_by(self) -> Edges:
         """Same as rect_diff, but with clearer attributes in namedtuple"""
         return Edges(*self.rect_diff)
 
