@@ -170,7 +170,7 @@ class Vector:
                 return 0
             else:  # downwards
                 return 180
-        angle = math.atan(math.radians(self.y / self.x))  # this gets the angle to the horizontal
+        angle = math.degrees(math.atan(self.y / self.x))  # this gets the angle to the horizontal
         if self.x >= 0:
             return 90 - angle
         else:
