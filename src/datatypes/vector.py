@@ -170,7 +170,7 @@ class Vector:
                 return 0
             else:  # downwards
                 return 180
-        angle = math.atan(math.degrees(self.y / self.x))  # this gets the angle to the horizontal
+        angle = math.atan(math.radians(self.y / self.x))  # this gets the angle to the horizontal
         if self.x >= 0:
             return 90 - angle
         else:
@@ -179,8 +179,8 @@ class Vector:
     @direction.setter
     def direction(self, value: float) -> None:
         """Adjusts the value of x and y while keeping the magnitude the same"""
-        self.x = math.sin(math.degrees(value)) * self.x
-        self.y = math.cos(math.degrees(value)) * self.y
+        self.x = math.sin(math.radians(value)) * self.x
+        self.y = math.cos(math.radians(value)) * self.y
 
     def __add__(self, other: "Vector") -> "Vector":
         """Add together two vectors"""
