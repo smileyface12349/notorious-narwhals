@@ -19,6 +19,11 @@ class InputGetter:
         while self.running:
             self.char_index_list.append(self.screen.getch())
 
+    @property
+    def char_list(self) -> list:
+        """Get the char_index_list as char_list"""
+        return list(map(lambda x: chr(x), self.char_index_list))
+
     def quit(self) -> NoReturn:
         """Quit the main InputGetter loop"""
         self.running = False
