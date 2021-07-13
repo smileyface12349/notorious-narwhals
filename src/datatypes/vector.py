@@ -3,10 +3,6 @@ from typing import Union
 
 from src.window_manager import WindowManager
 
-# TODO: These need to be dynamically generated based on the current screen size
-PIXELS_PER_TILE_X = 8
-PIXELS_PER_TILE_Y = 16
-
 
 class Vector:
     """Represents a value with both direction and magnitude"""
@@ -89,22 +85,22 @@ class Vector:
     @staticmethod
     def to_pixels_x(value: float) -> float:
         """Converts a horizontal distance from tiles into pixels"""
-        return value * PIXELS_PER_TILE_X
+        return value * WindowManager().font_size[0]
 
     @staticmethod
     def to_pixels_y(value: float) -> float:
         """Converts a vertical distance from tiles into pixels"""
-        return value * PIXELS_PER_TILE_Y
+        return value * WindowManager().font_size[1]
 
     @staticmethod
     def to_tiles_x(value: float) -> float:
         """Converts a horizontal distance from pixels into tiles"""
-        return value / PIXELS_PER_TILE_X
+        return value / WindowManager().font_size[0]
 
     @staticmethod
     def to_tiles_y(value: float) -> float:
         """Converts a vertical distance from pixels into tiles"""
-        return value / PIXELS_PER_TILE_Y
+        return value / WindowManager().font_size[1]
 
     @property
     def x(self) -> float:
