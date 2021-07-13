@@ -1,48 +1,60 @@
 import curses
-from collections import namedtuple  # Remove when GameObject class is done
-from typing import NoReturn
+from collections import deque, namedtuple  # Remove when GameObject class is done
+from typing import List, NoReturn
 
 GameObject = namedtuple(
-    "GameObject", ["position", "size", "color", "override_colors", "elasticity", "friction"]
+    "GameObject", ["position", "size", "color", "override_colors", "elasticity", "friction", "z"]
 )  # Remove when GameObject class is done
 # Import GameObject class when it is done
 
-# Defining colors based on objects` properties
-curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)  # Regular
-curses.init_pair(2, 121, curses.COLOR_BLACK)  # Sticky
-curses.init_pair(3, 111, curses.COLOR_BLACK)  # Icy (little to no friction)
-curses.init_pair(4, 228, curses.COLOR_BLACK)  # Bouncy
+
+def init_colors() -> NoReturn:
+    """Initialize colors"""
+    # Defining colors based on objects` properties
+    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)  # Regular
+    curses.init_pair(2, 121, curses.COLOR_BLACK)  # Sticky
+    curses.init_pair(3, 111, curses.COLOR_BLACK)  # Icy (little to no friction)
+    curses.init_pair(4, 228, curses.COLOR_BLACK)  # Bouncy
 
 
 class BoxState:
     """Defines the current state of the box. Has a render() method to display the contents"""
 
-    def __init__(self):
-        self.objects = []
+    _current_color_slot = 49
+
+    def __init__(self, initial_objects: List[GameObject] = None):
+        self.objects = deque()
+
+        if initial_objects is not None:
+            # Sorting objects initially to avoid sorting when rendering
+            self.objects = deque(sorted(initial_objects, key=lambda x: x.z))
 
     def clear(self) -> NoReturn:
         """Clears the box of all objects"""
-        self.objects = []  # todo use queue or deque to keep objects z-sorted efficiently
+        self.objects.clear()
 
     def add_object(self, obj: GameObject) -> NoReturn:
         """Adds an object to the objects list"""
         self.objects.append(obj)
+        self.objects = deque(sorted(self.objects, key=lambda x: x.z))
 
     def render(self, screen: curses.window) -> NoReturn:
         """Renders the contents of the box"""
         if len(self.objects) == 0:
             return  # There is nothing to render!
 
-        for obj in sorted(self.objects, key=lambda x: x.z):  # Sorts objects by their Z depth
+        for obj in self.objects:
             self._render_object(obj, screen)
 
         # screen.update() ?
 
     def _render_object(self, obj: GameObject, screen: curses.window) -> NoReturn:
-        """Renders object on the screen (character-by-character)"""
-        # Drawing stuff on the screen character-by-character
-        # It doesn't affect performance because curses draws all the stuff at once
-        # when screen.update() is called (or when .getkey() / .getch() is called)
+        """
+        Renders object on the screen (character-by-character)
+
+        It doesn't affect performance because curses draws all the stuff at once
+        when screen.update() is called (or when .getkey() / .getch() is called)
+        """
         color = self._get_object_color(obj)
 
         for x in range(obj.size[0]):
@@ -54,14 +66,27 @@ class BoxState:
                 if (draw_pos_x >= 0 and draw_pos_x < screen.getmaxyx()[1]) and (
                     draw_pos_y >= 0 and draw_pos_y < screen.getmaxyx()[0]
                 ):
-                    screen.insch(draw_pos_y, draw_pos_x, "@", color)
+                    if draw_pos_x == screen.getmaxyx()[1] - 1 and draw_pos_y == screen.getmaxyx()[0] - 1:
+                        # insch doesn't raise en error when drawing on the bottom right tile
+                        draw = screen.insch
+                    else:
+                        draw = screen.addch
+
+                    draw(draw_pos_y, draw_pos_x, "@", color)
 
     @staticmethod
     def _get_object_color(obj: GameObject) -> int:
-        """"""
+        """Gets the color of an object based on their properties / custom color"""
         if obj.override_colors:  # If the object decides to override default property-based colors:
-            curses.init_pair(100, *obj.color)
-            return curses.color_pair(100)
+            # All of this for multiple colors to render simultaneously
+            if BoxState._current_color_slot == 256:
+                BoxState._current_color_slot = 49
+
+            curses.init_pair(BoxState._current_color_slot, *obj.color)
+
+            BoxState._current_color_slot += 1  # Incrementing it for next iteration
+
+            return curses.color_pair(BoxState._current_color_slot - 1)
 
         # We're sorting if statements by importance. An object being bouncy is the most important,
         # therefore we're making it the top if statement.
