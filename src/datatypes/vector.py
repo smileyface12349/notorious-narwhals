@@ -3,9 +3,11 @@ from typing import Union
 
 from src.window_manager import WindowManager
 
+window_manager = WindowManager()
+
 
 class Vector:
-    """Represents a value with both direction and magnitude"""
+    """Represents a 2D vector"""
 
     def __init__(
         self,
@@ -27,9 +29,9 @@ class Vector:
         :param relative_y: The proportion of the height of the window to add on. Can be negative
         :param ratio_x: The proportion of how far the window has moved from its original position to add on
         :param ratio_y: The proportion of how far the window has moved from its original position to add on
-        :param initial_pos_x: The position of the window at the start of the level. If unspecified,
+        :param initial_pos_x: The horizontal position of the window at the start of the level. If unspecified,
         uses the position when the Vector object is initialized
-        :param initial_pos_y: The position of the window at the start of the level. If unspecified,
+        :param initial_pos_y: The vertical position of the window at the start of the level. If unspecified,
         uses the position when the Vector object is initialized
         """
         self.constant_x: float = x
@@ -45,8 +47,6 @@ class Vector:
         if not initial_pos_y:
             initial_pos_y = self.window_y
         self.default_window_y = initial_pos_y
-
-        self.window_manager = WindowManager()
 
     def copy(self) -> "Vector":
         """Returns an identical copy of the vector, preserving all relative information"""
@@ -85,22 +85,22 @@ class Vector:
     @staticmethod
     def to_pixels_x(value: float) -> float:
         """Converts a horizontal distance from tiles into pixels"""
-        return value * WindowManager().font_size[0]
+        return value * window_manager.font_size[0]
 
     @staticmethod
     def to_pixels_y(value: float) -> float:
         """Converts a vertical distance from tiles into pixels"""
-        return value * WindowManager().font_size[1]
+        return value * window_manager.font_size[1]
 
     @staticmethod
     def to_tiles_x(value: float) -> float:
         """Converts a horizontal distance from pixels into tiles"""
-        return value / WindowManager().font_size[0]
+        return value / window_manager.font_size[0]
 
     @staticmethod
     def to_tiles_y(value: float) -> float:
         """Converts a vertical distance from pixels into tiles"""
-        return value / WindowManager().font_size[1]
+        return value / window_manager.font_size[1]
 
     @property
     def x(self) -> float:
@@ -278,19 +278,19 @@ class Vector:
     @property
     def window_width(self) -> float:
         """Current width of the window"""
-        return self.to_tiles_x(self.window_manager.size[0])
+        return self.to_tiles_x(window_manager.size[0])
 
     @property
     def window_height(self) -> float:
         """Current height of the window"""
-        return self.to_tiles_y(self.window_manager.size[1])
+        return self.to_tiles_y(window_manager.size[1])
 
     @property
     def window_x(self) -> float:
         """Position of the window on the screen (x coordinate)"""
-        return self.to_tiles_x(self.window_manager.position[0])
+        return self.to_tiles_x(window_manager.position[0])
 
     @property
     def window_y(self) -> float:
         """Position of the window on the screen (y coordinate)"""
-        return self.to_tiles_y(self.window_manager.position[1])
+        return self.to_tiles_y(window_manager.position[1])
