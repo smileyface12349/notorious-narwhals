@@ -14,15 +14,15 @@ class InputGetter:
         self.thread = Thread(target=self._loop)
         self.thread.start()
 
-    def _loop(self) -> NoReturn:
-        """Main InputGetter loop (called as thread)"""
-        while self.running:
-            self.char_index_list.append(self.screen.getch())
-
     @property
     def char_list(self) -> list:
         """Get the char_index_list as char_list"""
         return list(map(lambda x: chr(x), self.char_index_list))
+
+    def _loop(self) -> NoReturn:
+        """Main InputGetter loop (called as thread)"""
+        while self.running:
+            self.char_index_list.append(self.screen.getch())
 
     def quit(self) -> NoReturn:
         """Quit the main InputGetter loop"""
@@ -31,6 +31,26 @@ class InputGetter:
     def clear(self) -> NoReturn:
         """Clear the char_index_list"""
         self.char_index_list = []
+
+    def get_char_index_iterator(self, clear: bool = False) -> list:
+        """Get the char_index_list
+
+        If clear is ture: get the char_index iterator and clear the list
+        """
+        output = self.char_index_list.copy()
+        if clear:
+            self.clear()
+        return output
+
+    def get_char_iterator(self, clear: bool = False) -> list:
+        """Get the char_list
+
+        If clear is ture: get the char iterator and clear the list
+        """
+        output = self.char_list.copy()
+        if clear:
+            self.clear()
+        return output
 
     def get_first_char_index(self, remove: bool = False, clear: bool = False) -> Optional[int]:
         """Get the first (oldest) char_index the main loop got
