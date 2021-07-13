@@ -76,7 +76,7 @@ class AbstractWindowManager(ABC):
         """
         Difference between current and previous rectangle coordinates of the window.
 
-        Use translated_corners_by for clearer attributes.
+        Use translated_edges_by for clearer attributes.
         """
         return Rectangle(*map(operator.sub, self.current_rect, self.previous_rect))
 
