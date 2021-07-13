@@ -1,6 +1,7 @@
 import operator
 import platform
 from abc import ABC, abstractmethod
+from os import get_terminal_size
 from typing import NoReturn, Optional
 
 from datatypes import Edges, Position, Rectangle, Size
@@ -49,6 +50,12 @@ class AbstractWindowManager(ABC):
         height = y2 - y1
         return Size(width, height)
 
+    def get_font_size(self, rect: Rectangle) -> Size:
+        """Extracts size (width, height) of each character as pixels"""
+        width = int(self.get_size(rect).width / get_terminal_size().columns)
+        height = int(self.get_size(rect).height / get_terminal_size().lines)
+        return Size(width, height)
+
     @property
     def position(self) -> Position:
         """Position (x, y) of the window on current frame (upper left corner)"""
@@ -58,6 +65,11 @@ class AbstractWindowManager(ABC):
     def size(self) -> Size:
         """Size (width, height) of the window on current frame"""
         return self.get_size(self.current_rect)
+
+    @property
+    def font_size(self) -> Size:
+        """Size (width, height) of each character as pixels"""
+        return self.get_font_size(self.current_rect)
 
     @property
     def rect_diff(self) -> Rectangle:
