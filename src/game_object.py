@@ -1,6 +1,6 @@
 from typing import NoReturn
 
-from datatypes.vector import Vector
+from datatypes import Vector
 
 # import shape from enums class
 # TODO: define shape datatype, orientation datatype, texture datatype
