@@ -95,3 +95,35 @@ class InputGetter:
         if clear:
             self.clear()
         return output
+
+    def get_char_index_at_index(self, index: int, remove: bool = False, clear: bool = False) -> Optional[int]:
+        """Get the char_index at a certain index fo the list
+
+        If remove is true: get the char_index at the index and remove it from the list
+        If clear is true: get the char_index at the index and clear the list
+        If index is not in the char_index_list: return None
+        """
+        if len(self.char_index_list) <= index:
+            return None
+        output = self.char_index_list[index]
+        if remove:
+            self.char_index_list.pop(index)
+        if clear:
+            self.clear()
+        return output
+
+    def get_char_at_index(self, index: int, remove: bool = False, clear: bool = False) -> Optional[str]:
+        """Get the char at a certain index fo the list
+
+        If remove is true: get the char at the index and remove it from the list
+        If clear is true: get the char at the index and clear the list
+        If index is not in the char_index_list: return None
+        """
+        if len(self.char_index_list) <= index:
+            return None
+        output = str(chr(self.char_index_list[index]))
+        if remove:
+            self.char_index_list.pop(index)
+        if clear:
+            self.clear()
+        return output
