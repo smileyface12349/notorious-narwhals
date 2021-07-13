@@ -1,10 +1,30 @@
 import curses
-from collections import deque, namedtuple  # Remove when GameObject class is done
-from typing import List, NoReturn
+import heapq
+from collections import namedtuple  # Remove when GameObject class is done
+from functools import total_ordering
+from typing import Any, List, NoReturn
 
-GameObject = namedtuple(
-    "GameObject", ["position", "size", "color", "override_colors", "elasticity", "friction", "z"]
-)  # Remove when GameObject class is done
+
+@total_ordering
+class ZSortMixin:
+    """Mixin to provide sorting by z-value"""
+
+    __slots__ = ()
+
+    def __lt__(self, other: Any):
+        """Lesser then cmp function"""
+        return self.z < other.z
+
+
+class GameObject(
+    ZSortMixin,
+    namedtuple("GameObject", ["position", "size", "color", "override_colors", "elasticity", "friction", "z"]),
+):  # Remove when GameObject class is done
+    """Placeholder for actual game object class"""
+
+    pass
+
+
 # Import GameObject class when it is done
 
 
@@ -23,11 +43,12 @@ class BoxState:
     _current_color_slot = 49
 
     def __init__(self, initial_objects: List[GameObject] = None):
-        self.objects = deque()
+        self.objects = []
 
         if initial_objects is not None:
             # Sorting objects initially to avoid sorting when rendering
-            self.objects = deque(sorted(initial_objects, key=lambda x: x.z))
+            for obj in initial_objects:
+                heapq.heappush(self.objects, obj)
 
     def clear(self) -> NoReturn:
         """Clears the box of all objects"""
@@ -35,8 +56,7 @@ class BoxState:
 
     def add_object(self, obj: GameObject) -> NoReturn:
         """Adds an object to the objects list"""
-        self.objects.append(obj)
-        self.objects = deque(sorted(self.objects, key=lambda x: x.z))
+        heapq.heappush(self.objects, obj)
 
     def render(self, screen: curses.window) -> NoReturn:
         """Renders the contents of the box"""

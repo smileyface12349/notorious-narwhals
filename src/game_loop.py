@@ -9,19 +9,22 @@ class GameLoop:
         self.max_fps = max_fps
         self.window_manager = None
         self.active_state_box = None
+
         self.running = False
+        self.throttle = False
 
     def start(self) -> NoReturn:
         """Main game loop. This method blocks until game is finished!"""
-        t = time.time()
         period = 1 / self.max_fps
         self.running = True
 
         self._pre_loop()
         while self.running:
-            t += period
+            frame_end_time = time.time() + period
             self._loop_step()
-            time.sleep(max(0.0, t - time.time()))
+            sleep_time = max(0.0, frame_end_time - time.time())
+            self.throttle = sleep_time == 0
+            time.sleep(sleep_time)
 
     def _pre_loop(self) -> NoReturn:
         """Every call that is to be scheduled before loop start goes here"""
