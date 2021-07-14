@@ -4,7 +4,8 @@ from typing import NoReturn, Tuple, Union
 sys.path.append("..")
 
 from src.box import GameObject  # noqa: E402
-from src.datatypes import Vector  # noqa: E402
+
+from .vector import Vector  # noqa: E402
 
 
 class Texture:

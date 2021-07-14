@@ -1,9 +1,12 @@
 import math
+import typing
 from typing import List, NoReturn, Optional, Tuple, Union
 
 from .textures import EmptyTexture, Texture
-from .triggers import Triggers
 from .vector import Vector
+
+if typing.TYPE_CHECKING:
+    from .triggers import Triggers
 
 
 class GameObject:
@@ -21,7 +24,7 @@ class GameObject:
         mass: float = 1,
         velocity: Vector = Vector(0, 0),
         forces: List[Vector] = None,
-        triggers: Triggers = None,
+        triggers: "Triggers" = None,
         collision: List[int] = None,
         z: int = 0,
         gravity: Vector = Vector(0, -0.49),

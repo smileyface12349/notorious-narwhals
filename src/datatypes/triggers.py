@@ -1,8 +1,10 @@
+import typing
 from typing import List, NoReturn
 
-from src.datatypes.game_object import GameObject
-
 from .vector import Vector
+
+if typing.TYPE_CHECKING:
+    from . import GameObject
 
 
 class Triggers:
@@ -31,7 +33,7 @@ class Trigger:
 class ForceTrigger(Trigger):
     """Represents a trigger involving applying a force to another object"""
 
-    def __init__(self, target: GameObject, force: Vector):
+    def __init__(self, target: "GameObject", force: Vector):
         self.target = target
         self.force = force
 

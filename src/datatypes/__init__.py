@@ -7,12 +7,7 @@ Edges = namedtuple("Corners", ["left", "top", "right", "bottom"])
 Color = namedtuple("Color", ["fg", "bg"])
 Menu = namedtuple("Menu", ["text_lines", "options", "options_actions"])
 
-from .vector import Vector as VectorImported  # noqa: E402
-
-Vector = VectorImported
-
-from .textures import EmptyTexture as EmptyTextureImported  # noqa: E402
-from .textures import Texture as TextureImported  # noqa: E402
-
-Texture = TextureImported
-EmptyTexture = EmptyTextureImported
+from .game_object import GameObject  # noqa: F401 E402
+from .textures import EmptyTexture as EmptyTexture  # noqa: F401 E402
+from .textures import Texture as Texture  # noqa: F401 E402
+from .vector import Vector as Vector  # noqa: F401 E402
