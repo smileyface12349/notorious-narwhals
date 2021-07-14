@@ -26,6 +26,7 @@ class MenuDrawer:
         self.input_getter = input_getter
         self.width, self.height = get_terminal_size()
         curses.init_pair(1000, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        self.window_manager.update()
         self.max_fps = max_fps
 
     def update(self) -> NoReturn:
@@ -39,6 +40,7 @@ class MenuDrawer:
             max_lenth * self.window_manager.font_size.width,
             (len(menu.text_lines) + len(menu.options) + 3) * self.window_manager.font_size.height,
         )
+        self.window_manager.update()
         top_line = int(self.height / 2 - (len(menu.text_lines) + len(menu.options) + 3) / 2)
         selected = 0
         while True:
@@ -95,6 +97,17 @@ class GameLoop:
         self.window_manager.update()
         self.active_state_box.render()
 
+
+menus = {
+    "start": Menu(
+        ["Title of the Game", "By the Notorious Narwhals"],
+        ["Play", "Select Level", "How to play", "About", "Settings", "Exit"],
+    ),
+    "levels": Menu(["Not implemented yet"], ["Back"]),
+    "help": Menu(["Paste here a nice explanation", "how to play the game"], ["Back"]),
+    "about": Menu(["Paste here a nice text about", "hte Notorious Narwhals and the Code Jam"], ["Back"]),
+    "settings": Menu(["Not implemented yet"], ["Back"]),
+}
 
 if __name__ == "__main__":
     loop = GameLoop()
