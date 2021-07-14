@@ -98,16 +98,30 @@ class GameLoop:
         self.active_state_box.render()
 
 
+# fmt: off
 menus = {
     "start": Menu(
         ["Title of the Game", "By the Notorious Narwhals"],
         ["Play", "Select Level", "How to play", "About", "Settings", "Exit"],
     ),
-    "levels": Menu(["Not implemented yet"], ["Back"]),
-    "help": Menu(["Paste here a nice explanation", "how to play the game"], ["Back"]),
-    "about": Menu(["Paste here a nice text about", "hte Notorious Narwhals and the Code Jam"], ["Back"]),
-    "settings": Menu(["Not implemented yet"], ["Back"]),
+    "levels": Menu(
+        ["Not implemented yet"],
+        ["Back"]
+    ),
+    "help": Menu(
+        ["Paste here a nice explanation", "how to play the game"],
+        ["Back"]
+    ),
+    "about": Menu(
+        ["Paste here a nice text about", "hte Notorious Narwhals and the Code Jam"],
+        ["Back"]
+    ),
+    "settings": Menu(
+        ["Not implemented yet"],
+        ["Back"]
+    ),
 }
+# fmt: on
 
 
 def main(screen: curses.window) -> NoReturn:
@@ -125,6 +139,18 @@ def main(screen: curses.window) -> NoReturn:
         if menu == "start":
             if menu_return == 0:
                 break
+            elif menu_return == 1:
+                menu = "levels"
+            elif menu_return == 2:
+                menu = "help"
+            elif menu_return == 3:
+                menu = "about"
+            elif menu_return == 4:
+                menu = "settings"
+            elif menu_return == 5:
+                return
+        elif menu in ["levels", "help", "about", "settings"]:
+            menu = "start"
 
     loop = GameLoop(window_manager)
     loop.start()
