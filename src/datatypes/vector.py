@@ -217,6 +217,13 @@ class Vector:
         new.y /= other
         return new
 
+    def __neg__(self) -> "Vector":
+        """Negates the x and y coordinates of the vector (180 degree rotation)"""
+        new = self.copy()
+        new.x = -new.x
+        new.y = -new.y
+        return new
+
     def __ge__(self, other: Union[float, "Vector"]) -> bool:
         """Compares the magnitude of the vector with either another vector or a scalar"""
         if isinstance(other, Vector):
