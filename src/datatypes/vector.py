@@ -203,6 +203,13 @@ class Vector:
         new.y *= other
         return new
 
+    def __rmul__(self, other: float) -> "Vector":
+        """Multiply a scalar by a vector"""
+        new = self.copy()
+        new.x *= other
+        new.y *= other
+        return new
+
     def __truediv__(self, other: float) -> "Vector":
         """Divide a vector by a scalar"""
         new = self.copy()
