@@ -27,6 +27,10 @@ class InputGetter:
     def quit(self) -> NoReturn:
         """Quit the main InputGetter loop"""
         self.running = False
+        self.screen.clear()
+        self.screen.addstr(0, 0, "Press any key to quit")
+        self.screen.refresh()
+        self.thread.join()
 
     def clear(self) -> NoReturn:
         """Clear the char_index_list"""

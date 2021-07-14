@@ -35,9 +35,9 @@ class MenuDrawer:
 
     def draw_menu(self, menu: Menu) -> int:
         """Draw a menu"""
-        max_lenth = max(list(map(lambda x: len(x), menu.text_lines + menu.options)))
+        max_length = max(list(map(lambda x: len(x), menu.text_lines + menu.options)))
         self.window_manager.min_size = Size(
-            max_lenth * self.window_manager.font_size.width,
+            max_length * self.window_manager.font_size.width,
             (len(menu.text_lines) + len(menu.options) + 3) * self.window_manager.font_size.height,
         )
         self.window_manager.update()
@@ -50,18 +50,22 @@ class MenuDrawer:
                 self.screen.addstr(top_line + index + 1, 0, center(item, self.width))
             for index, item in enumerate(menu.options):
                 if index == selected:
-                    self.screen.attron(curses.color_pair(1000))
+                    self.screen.attron(curses.color_pair(200))
                 self.screen.addstr(top_line + len(menu.text_lines) + index + 2, 0, center(item, self.width))
                 if index == selected:
-                    self.screen.attroff(curses.color_pair(1000))
+                    self.screen.attroff(curses.color_pair(200))
+            self.screen.refresh()
+
             time.sleep(1 / self.max_fps)
-            for key in self.input_getter.get_char_index_iterator(clear=True):
-                if key == 10:
-                    return selected
-                elif key == curses.KEY_UP:
-                    selected = max(selected - 1, 0)
-                elif key == curses.KEY_DOWN:
-                    selected = min(selected + 1, len(menu.options) - 1)
+            key = self.input_getter.get_first_char_index(remove=True)
+            if key == 10:
+                return selected
+            elif key == curses.KEY_UP:
+                selected = max(selected - 1, 0)
+            elif key == curses.KEY_DOWN:
+                selected = min(selected + 1, len(menu.options) - 1)
+            elif key in [ord("q"), ord("Q")]:
+                return -1
 
 
 class GameLoop:
@@ -136,6 +140,9 @@ def main(screen: curses.window) -> NoReturn:
     menu = "start"
     while True:
         menu_return = menu_drawer.draw_menu(menus[menu])
+        if menu_return == -1:
+            input_getter.quit()
+            return
         if menu == "start":
             if menu_return == 0:
                 break
@@ -148,6 +155,7 @@ def main(screen: curses.window) -> NoReturn:
             elif menu_return == 4:
                 menu = "settings"
             elif menu_return == 5:
+                input_getter.quit()
                 return
         elif menu in ["levels", "help", "about", "settings"]:
             menu = "start"
@@ -158,3 +166,4 @@ def main(screen: curses.window) -> NoReturn:
 
 if __name__ == "__main__":
     curses.wrapper(main)
+    curses.endwin()
