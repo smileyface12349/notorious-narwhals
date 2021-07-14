@@ -67,9 +67,9 @@ class MenuDrawer:
 class GameLoop:
     """Main game loop class. Entry point of the game."""
 
-    def __init__(self, max_fps: int = 20):
+    def __init__(self, window_manager: WindowManager, max_fps: int = 20):
         self.max_fps = max_fps
-        self.window_manager = None
+        self.window_manager = window_manager
         self.active_state_box = None
 
         self.running = False
@@ -109,6 +109,26 @@ menus = {
     "settings": Menu(["Not implemented yet"], ["Back"]),
 }
 
-if __name__ == "__main__":
-    loop = GameLoop()
+
+def main(screen: curses.window) -> NoReturn:
+    """Main curses function"""
+    curses.curs_set(False)
+    curses.set_escdelay(1)
+
+    window_manager = WindowManager()
+    input_getter = InputGetter(screen)
+    menu_drawer = MenuDrawer(screen, window_manager, input_getter)
+
+    menu = "start"
+    while True:
+        menu_return = menu_drawer.draw_menu(menus[menu])
+        if menu == "start":
+            if menu_return == 0:
+                break
+
+    loop = GameLoop(window_manager)
     loop.start()
+
+
+if __name__ == "__main__":
+    curses.wrapper(main)
