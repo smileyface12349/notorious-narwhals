@@ -1,40 +1,45 @@
 import curses
 import time
+from os import get_terminal_size
 from typing import NoReturn
 
+from datatypes import Menu, Size
 
-class Menu:
-    """A class to draw all the menus"""
+from .input_getter import InputGetter
+from .window_manager import WindowManager
 
-    def __init__(self, screen: curses.window):
+
+def center(string: str, width: int) -> str:
+    """Center the string"""
+    return f"{string:^{width}}"
+
+
+class MenuDrawer:
+    """A class to draw menus"""
+
+    def __init__(self, screen: curses.window, window_manager: WindowManager, input_getter: InputGetter):
         """Initilize a new menu"""
         self.screen = screen
+        self.window_manager = window_manager
+        self.input_getter = input_getter
+        self.width, self.height = get_terminal_size()
         curses.init_pair(1001, curses.COLOR_WHITE, curses.COLOR_BLACK)
         curses.init_pair(1002, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
-    def start(self) -> NoReturn:
-        """Draw start screen"""
-        pass
+    def update(self) -> NoReturn:
+        """Update width and height"""
+        self.width, self.height = get_terminal_size()
 
-    def levels(self) -> NoReturn:
-        """Draw levels screen"""
-        pass
-
-    def help(self) -> NoReturn:
-        """Draw help screen"""
-        pass
-
-    def about(self) -> NoReturn:
-        """Draw about screen"""
-        pass
-
-    def pause(self) -> NoReturn:
-        """Draw pause screen"""
-        pass
-
-    def settings(self) -> NoReturn:
-        """Draw settings screen"""
-        pass
+    def draw_menu(self, menu: Menu) -> int:
+        """Draw a menu"""
+        self.update()
+        max_lenth = max(list(map(lambda x: len(str(x)), menu.text_lines + menu.options)))
+        self.window_manager.min_size = Size(
+            max_lenth * self.window_manager.font_size.width,
+            (len(menu.text_lines) + len(menu.options) + 3) * self.window_manager.font_size.height,
+        )
+        top_line = int(self.height / 2 - (len(menu.text_lines) + len(menu.options) + 3) / 2)
+        return top_line  # Not done yet
 
 
 class GameLoop:
