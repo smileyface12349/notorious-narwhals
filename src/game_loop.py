@@ -1,4 +1,5 @@
 import curses
+import os
 import time
 from os import get_terminal_size
 from typing import NoReturn
@@ -126,7 +127,7 @@ menus = {
 def main(screen: curses.window) -> NoReturn:
     """Main curses function"""
     curses.curs_set(False)
-    curses.set_escdelay(1)
+    os.environ.setdefault("ESCDELAY", "25")
 
     window_manager = WindowManager()
     input_getter = InputGetter(screen)
