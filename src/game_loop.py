@@ -20,7 +20,7 @@ class MenuDrawer:
     def __init__(
         self, screen: curses.window, window_manager: WindowManager, input_getter: InputGetter, max_fps: int = 20
     ):
-        """Initilize a new menu"""
+        """Initialize a new menu"""
         self.screen = screen
         self.window_manager = window_manager
         self.input_getter = input_getter
@@ -117,7 +117,7 @@ menus = {
         ["Back"]
     ),
     "about": Menu(
-        ["Paste here a nice text about", "hte Notorious Narwhals and the Code Jam"],
+        ["Paste here a nice text about", "the Notorious Narwhals and the Code Jam"],
         ["Back"]
     ),
     "settings": Menu(

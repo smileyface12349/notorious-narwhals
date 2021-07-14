@@ -7,7 +7,7 @@ class InputGetter:
     """A class that uses curses.getch() to get input"""
 
     def __init__(self, screen: curses.window):
-        """Initilize the InputGetter"""
+        """Initialize the InputGetter"""
         self.screen = screen
         self.char_index_list = []
         self.running = True
