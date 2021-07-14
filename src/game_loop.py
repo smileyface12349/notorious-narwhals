@@ -4,9 +4,8 @@ from os import get_terminal_size
 from typing import NoReturn
 
 from datatypes import Menu, Size
-
-from .input_getter import InputGetter
-from .window_manager import WindowManager
+from input_getter import InputGetter
+from window_manager import WindowManager
 
 
 def center(string: str, width: int) -> str:
