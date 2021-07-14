@@ -1,7 +1,10 @@
+import sys
 from typing import List, NoReturn, Tuple, Union
 
-from src.box import GameObject
-from src.datatypes import Vector
+sys.path.append("..")
+
+from src.box import GameObject  # noqa: E402
+from src.datatypes import Vector  # noqa: E402
 
 
 class Texture:
