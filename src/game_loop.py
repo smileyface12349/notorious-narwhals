@@ -17,14 +17,16 @@ def center(string: str, width: int) -> str:
 class MenuDrawer:
     """A class to draw menus"""
 
-    def __init__(self, screen: curses.window, window_manager: WindowManager, input_getter: InputGetter):
+    def __init__(
+        self, screen: curses.window, window_manager: WindowManager, input_getter: InputGetter, max_fps: int = 20
+    ):
         """Initilize a new menu"""
         self.screen = screen
         self.window_manager = window_manager
         self.input_getter = input_getter
         self.width, self.height = get_terminal_size()
-        curses.init_pair(1001, curses.COLOR_WHITE, curses.COLOR_BLACK)
-        curses.init_pair(1002, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        curses.init_pair(1000, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        self.max_fps = max_fps
 
     def update(self) -> NoReturn:
         """Update width and height"""
@@ -32,14 +34,32 @@ class MenuDrawer:
 
     def draw_menu(self, menu: Menu) -> int:
         """Draw a menu"""
-        self.update()
-        max_lenth = max(list(map(lambda x: len(str(x)), menu.text_lines + menu.options)))
+        max_lenth = max(list(map(lambda x: len(x), menu.text_lines + menu.options)))
         self.window_manager.min_size = Size(
             max_lenth * self.window_manager.font_size.width,
             (len(menu.text_lines) + len(menu.options) + 3) * self.window_manager.font_size.height,
         )
         top_line = int(self.height / 2 - (len(menu.text_lines) + len(menu.options) + 3) / 2)
-        return top_line  # Not done yet
+        selected = 0
+        while True:
+            self.update()
+            self.screen.clear()
+            for index, item in enumerate(menu.text_lines):
+                self.screen.addstr(top_line + index + 1, 0, center(item, self.width))
+            for index, item in enumerate(menu.options):
+                if index == selected:
+                    self.screen.attron(curses.color_pair(1000))
+                self.screen.addstr(top_line + len(menu.text_lines) + index + 2, 0, center(item, self.width))
+                if index == selected:
+                    self.screen.attroff(curses.color_pair(1000))
+            time.sleep(1 / self.max_fps)
+            for key in self.input_getter.get_char_index_iterator(clear=True):
+                if key == 10:
+                    return selected
+                elif key == curses.KEY_UP:
+                    selected = max(selected - 1, 0)
+                elif key == curses.KEY_DOWN:
+                    selected = min(selected + 1, len(menu.options) - 1)
 
 
 class GameLoop:
