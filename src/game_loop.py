@@ -1,5 +1,40 @@
+import curses
 import time
 from typing import NoReturn
+
+
+class Menu:
+    """A class to draw all the menus"""
+
+    def __init__(self, screen: curses.window):
+        """Initilize a new menu"""
+        self.screen = screen
+        curses.init_pair(1001, curses.COLOR_WHITE, curses.COLOR_BLACK)
+        curses.init_pair(1002, curses.COLOR_BLACK, curses.COLOR_WHITE)
+
+    def start(self) -> NoReturn:
+        """Draw start screen"""
+        pass
+
+    def levels(self) -> NoReturn:
+        """Draw levels screen"""
+        pass
+
+    def help(self) -> NoReturn:
+        """Draw help screen"""
+        pass
+
+    def about(self) -> NoReturn:
+        """Draw about screen"""
+        pass
+
+    def pause(self) -> NoReturn:
+        """Draw pause screen"""
+        pass
+
+    def settings(self) -> NoReturn:
+        """Draw settings screen"""
+        pass
 
 
 class GameLoop:
