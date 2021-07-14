@@ -21,7 +21,26 @@ else:
     raise RuntimeError("OS is not supported")
 
 
-class AbstractWindowManager(ABC):
+class Singleton(type):
+    """Metaclass to convert any class into a singleton"""
+
+    def __init__(cls, name, bases, d):  # noqa: ANN001 D101
+        super(Singleton, cls).__init__(name, bases, d)
+        cls.instance = None
+
+    def __call__(cls, *args, **kwargs):  # noqa: D101 D102
+        if cls.instance is None:
+            cls.instance = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls.instance
+
+
+class ABCSingleton(type(ABC), type(Singleton)):
+    """Metaclass that combines ABC and Singleton behavior"""
+
+    pass
+
+
+class AbstractWindowManager(metaclass=ABCSingleton):
     """Class to get and manage window position and size, as well as movement and resizing"""
 
     def __init__(self):
