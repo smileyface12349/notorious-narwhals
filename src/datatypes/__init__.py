@@ -5,12 +5,14 @@ Size = namedtuple("Size", ["width", "height"])
 Rectangle = namedtuple("Rectangle", ["x1", "y1", "x2", "y2"])
 Edges = namedtuple("Corners", ["left", "top", "right", "bottom"])
 Color = namedtuple("Color", ["fg", "bg"])
-Menu = namedtuple("Menu", ["text_lines", "options"])
+Menu = namedtuple("Menu", ["text_lines", "options", "options_actions"])
 
-from .textures import EmptyTexture as EmptyTextureImported  # noqa: E402
-from .textures import Texture as TextureImported  # noqa: E402
 from .vector import Vector as VectorImported  # noqa: E402
 
 Vector = VectorImported
+
+from .textures import EmptyTexture as EmptyTextureImported  # noqa: E402
+from .textures import Texture as TextureImported  # noqa: E402
+
 Texture = TextureImported
 EmptyTexture = EmptyTextureImported
