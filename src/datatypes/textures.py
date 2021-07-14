@@ -1,5 +1,5 @@
 import sys
-from typing import List, NoReturn, Tuple, Union
+from typing import NoReturn, Tuple, Union
 
 sys.path.append("..")
 
@@ -96,7 +96,7 @@ class FixedTexture(Texture):
     This allows every tile to be defined
     """
 
-    def __init__(self, texture: List[List[str, int]], obj: GameObject = None):
+    def __init__(self, texture: list[list[str, int]], obj: GameObject = None):
         """Initialize a fixed texture
 
         Texture will seamlessly wrap around lines as defined by the size of the object. Do not implement line breaks
@@ -132,7 +132,7 @@ class RotatingTexture(Texture):
     This allows every tile to be defined
     """
 
-    def __init__(self, texture: Union[List[List[float, float, Texture]], List[List[Texture]]], obj: GameObject = None):
+    def __init__(self, texture: Union[list[list[float, float, Texture]], list[list[Texture]]], obj: GameObject = None):
         """
         Angles are measured clockwise from directly upwards in degrees
 
