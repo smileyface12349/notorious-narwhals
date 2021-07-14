@@ -1,7 +1,10 @@
 import math
+import sys
 from typing import Union
 
-from src.window_manager import WindowManager
+sys.path.append("..")
+
+from src.window_manager import WindowManager  # noqa: E402
 
 window_manager = WindowManager()
 

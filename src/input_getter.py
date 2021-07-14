@@ -7,7 +7,7 @@ class InputGetter:
     """A class that uses curses.getch() to get input"""
 
     def __init__(self, screen: curses.window):
-        """Initilize the InputGetter"""
+        """Initialize the InputGetter"""
         self.screen = screen
         self.char_index_list = []
         self.running = True
@@ -27,6 +27,10 @@ class InputGetter:
     def quit(self) -> NoReturn:
         """Quit the main InputGetter loop"""
         self.running = False
+        self.screen.clear()
+        self.screen.addstr(0, 0, "Press any key to quit")
+        self.screen.refresh()
+        self.thread.join()
 
     def clear(self) -> NoReturn:
         """Clear the char_index_list"""
