@@ -25,7 +25,7 @@ class MenuDrawer:
         self.window_manager = window_manager
         self.input_getter = input_getter
         self.width, self.height = get_terminal_size()
-        curses.init_pair(1000, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        curses.init_pair(200, curses.COLOR_BLACK, curses.COLOR_WHITE)
         self.window_manager.update()
         self.max_fps = max_fps
 
