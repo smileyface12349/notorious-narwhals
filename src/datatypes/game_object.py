@@ -65,7 +65,7 @@ class GameObject:
         self._acceleration: Vector = Vector(0, 0)
         self._touching = []
 
-    def update(self, touching: List[List[float, float, Union["GameObject", int]]] = None) -> NoReturn:
+    def update(self, touching: List[Tuple[float, float, Union["GameObject", int]]] = None) -> NoReturn:
         """Updates the state of the object. Should be called every tick
 
         :param touching: A list of objects that are in contact with this object, and the angle they are from the
