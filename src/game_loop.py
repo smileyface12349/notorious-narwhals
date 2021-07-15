@@ -124,8 +124,8 @@ class MenuLoop(AbstractAppLoop):
         rows, cols = self.screen.getmaxyx()
         # self.screen.resize(rows, cols)
         curses.resize_term(rows, cols)  # more window glitches, less text glitches and crashes
-
         top_line = rows // 2 - (len(self.menu.text_lines) + len(self.menu.options)) // 2
+
         for index, item in enumerate(self.menu.text_lines):
             y = top_line + index + 1
             x = cols // 2 - len(item) // 2
@@ -136,17 +136,16 @@ class MenuLoop(AbstractAppLoop):
             color = curses.color_pair(0) if index != self.selected_index else curses.color_pair(self.MENU_COLOR_PAIR)
             y = top_line + len(self.menu.text_lines) + index + 2
             x = cols // 2 - len(item) // 2
-
             if len(item) < cols and y < rows - 1:  # checks aren't working sometimes?
                 self.screen.addstr(y, x, item, color)
 
         self.screen.refresh()
-
         return exit_code
 
     def _post_loop(self) -> NoReturn:
         """Every call that is to be scheduled after loop stop goes here"""
         self.screen.clear()
+        super()._post_loop()  # In case we implement there stuff soon
 
     def _get_key_action(self, key: int) -> int:
         """Returns exit code or action of pressed key"""
@@ -214,6 +213,7 @@ def main(screen: curses.window) -> NoReturn:
         menu = menu_drawer.menu.options_actions[menu_return]
         if menu == ExitCodes.STOP:  # exit via option action choice
             break
+        menu_drawer.selected_index = 0
 
         if menu == "loop":
             loop_return = loop.start()
