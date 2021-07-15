@@ -36,26 +36,6 @@ class InputGetter:
         """Clear the char_index_list"""
         self.char_index_list = []
 
-    def get_char_index_iterator(self, clear: bool = False) -> list:
-        """Get the char_index_list
-
-        If clear is ture: get the char_index iterator and clear the list
-        """
-        output = self.char_index_list.copy()
-        if clear:
-            self.clear()
-        return output
-
-    def get_char_iterator(self, clear: bool = False) -> list:
-        """Get the char_list
-
-        If clear is ture: get the char iterator and clear the list
-        """
-        output = self.char_list.copy()
-        if clear:
-            self.clear()
-        return output
-
     def get_first_char_index(self, remove: bool = False, clear: bool = False) -> Optional[int]:
         """Get the first (oldest) char_index the main loop got
 
