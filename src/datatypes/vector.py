@@ -44,12 +44,9 @@ class Vector:
         self.ratio_x: float = ratio_x
         self.ratio_y: float = ratio_y
 
-        if not initial_pos_x:
-            initial_pos_x = self.window_x
-        self.default_window_x = initial_pos_x
-        if not initial_pos_y:
-            initial_pos_y = self.window_y
-        self.default_window_y = initial_pos_y
+        # to prevent circular imports, these are only calculated when first accessed
+        self._default_window_x = initial_pos_x
+        self._default_window_y = initial_pos_y
 
     def copy(self) -> "Vector":
         """Returns an identical copy of the vector, preserving all relative information"""
@@ -311,3 +308,17 @@ class Vector:
     def window_y(self) -> float:
         """Position of the window on the screen (y coordinate)"""
         return self.to_tiles_y(window_manager.position[1])
+
+    @property
+    def default_window_x(self) -> float:
+        """Gets the original position of the window"""
+        if not self._default_window_x:
+            self._default_window_x = self.window_x
+        return self._default_window_x
+
+    @property
+    def default_window_y(self) -> float:
+        """Gets the original position of the window"""
+        if not self._default_window_y:
+            self._default_window_y = self.window_y
+        return self._default_window_y
