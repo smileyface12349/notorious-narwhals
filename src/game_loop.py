@@ -88,7 +88,6 @@ class GameLoop(AbstractAppLoop):
     def _loop_step(self) -> Optional[int]:
         """Every call that is to be scheduled at each frame goes here"""
         exit_code = super()._loop_step()
-        self.window_manager.update()
         # self.active_state_box.render()
         return exit_code
 
