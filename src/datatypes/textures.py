@@ -97,7 +97,7 @@ class FixedTexture(Texture):
     This allows every tile to be defined
     """
 
-    def __init__(self, texture: List[List[str, int]], obj: "GameObject" = None):  # noqa: F821
+    def __init__(self, texture: Tuple[Tuple[str, int]], obj: "GameObject" = None):  # noqa: F821
         """Initialize a fixed texture
 
         Texture will seamlessly wrap around lines as defined by the size of the object. Do not implement line breaks
@@ -135,7 +135,7 @@ class RotatingTexture(Texture):
 
     def __init__(
         self,
-        texture: Union[List[List[float, float, Texture]], List[List[Texture]]],
+        texture: Union[List[Tuple[float, float, Texture]], List[List[Texture]]],
         obj: "GameObject" = None,  # noqa: F821
     ):
         """
