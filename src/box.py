@@ -1,8 +1,9 @@
 import curses
 import heapq
-from collections import namedtuple  # Remove when GameObject class is done
 from functools import total_ordering
 from typing import Any, List, NoReturn
+
+from datatypes import GameObject
 
 
 @total_ordering
@@ -14,15 +15,6 @@ class ZSortMixin:
     def __lt__(self, other: Any):
         """Lesser then cmp function"""
         return self.z < other.z
-
-
-class GameObject(
-    ZSortMixin,
-    namedtuple("GameObject", ["position", "size", "color", "override_colors", "elasticity", "friction", "z"]),
-):  # Remove when GameObject class is done
-    """Placeholder for actual game object class"""
-
-    pass
 
 
 # Import GameObject class when it is done
@@ -75,24 +67,18 @@ class BoxState:
         It doesn't affect performance because curses draws all the stuff at once
         when screen.update() is called (or when .getkey() / .getch() is called)
         """
-        color = self._get_object_color(obj)
+        # color = self._get_object_color(obj)
 
-        for x in range(obj.size[0]):
-            for y in range(obj.size[1]):
-                draw_pos_x = round(obj.position[0]) + x
-                draw_pos_y = round(obj.position[1]) + y
+        buffer = obj.render()
+        for pos, char, colour in buffer:
+            if (0 <= pos.x < screen.getmaxyx()[1]) and (0 <= pos.y < screen.getmaxyx()[0]):
+                if pos.x == screen.getmaxyx()[1] - 1 and pos.y == screen.getmaxyx()[0] - 1:
+                    # insch doesn't raise en error when drawing on the bottom right tile
+                    draw = screen.insch
+                else:
+                    draw = screen.addch
 
-                # Giant if statement to decide if we should draw the tile
-                if (draw_pos_x >= 0 and draw_pos_x < screen.getmaxyx()[1]) and (
-                    draw_pos_y >= 0 and draw_pos_y < screen.getmaxyx()[0]
-                ):
-                    if draw_pos_x == screen.getmaxyx()[1] - 1 and draw_pos_y == screen.getmaxyx()[0] - 1:
-                        # insch doesn't raise en error when drawing on the bottom right tile
-                        draw = screen.insch
-                    else:
-                        draw = screen.addch
-
-                    draw(draw_pos_y, draw_pos_x, "@", color)
+                draw(pos.y, pos.x, char, colour)
 
     @staticmethod
     def _get_object_color(obj: GameObject) -> int:
