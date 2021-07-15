@@ -176,7 +176,17 @@ menus = {
         ["start"],
     ),
     "about": Menu(
-        ["Paste here a nice text about", "the Notorious Narwhals and the Code Jam"],
+        [
+            "This game was created during the Python Summer Code Jam 2021",
+            "by the Notorious Narwhals:",
+            "https://github.com/artem30801",
+            "https://github.com/Martysh12",
+            "https://github.com/Noxmain",
+            "https://github.com/SHIMI-W",
+            "https://github.com/smileyface12349",
+            "https://github.com/smokeythemonkey",
+            "(In alphabetical order)"
+        ],
         ["Back"],
         ["start"],
     ),
@@ -185,10 +195,15 @@ menus = {
         ["Back"],
         ["start"],
     ),
+    "settings_paused": Menu(
+        ["Not implemented yet"],
+        ["Back"],
+        ["pause"],
+    ),
     "pause": Menu(
         ["Paused"],
         ["Continue", "Settings", "Menu", "Exit"],
-        ["loop", "settings", "start", ExitCodes.STOP]
+        ["loop", "settings_paused", "start", ExitCodes.STOP]
     )
 }
 # fmt: on
