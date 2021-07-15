@@ -3,7 +3,7 @@ from typing import List, NoReturn, Tuple, Union
 
 sys.path.append("..")
 
-from src.box import GameObject  # noqa: E402
+# from .game_object import GameObject  # noqa: E402
 
 from .vector import Vector  # noqa: E402
 
@@ -17,7 +17,7 @@ class Texture:
     This can be attached to a single object so it updates dynamically with that object
     """
 
-    def __init__(self, obj: GameObject = None):
+    def __init__(self, obj: "GameObject" = None):  # noqa: F821
         """Initialize a Texture
 
         :param obj: The object this texture belongs to.
@@ -65,7 +65,7 @@ class SolidTexture(Texture):
     Supports variable size and rotations
     """
 
-    def __init__(self, char: str, colour: int, obj: GameObject = None):
+    def __init__(self, char: str, colour: int, obj: "GameObject" = None):  # noqa: F821
         """Initialize a solid texture
 
         :param char: Single character to span the entire texture
@@ -87,7 +87,7 @@ class SolidTexture(Texture):
 class EmptyTexture(SolidTexture):
     """An entirely transparent texture, mostly used internally when textures are not specified"""
 
-    def __init__(self, obj: GameObject = None):
+    def __init__(self, obj: "GameObject" = None):  # noqa: F821
         super().__init__(obj=obj, char="TRANSPARENT", colour=0)
 
 
@@ -97,7 +97,7 @@ class FixedTexture(Texture):
     This allows every tile to be defined
     """
 
-    def __init__(self, texture: List[List[str, int]], obj: GameObject = None):
+    def __init__(self, texture: List[List[str, int]], obj: "GameObject" = None):  # noqa: F821
         """Initialize a fixed texture
 
         Texture will seamlessly wrap around lines as defined by the size of the object. Do not implement line breaks
@@ -133,7 +133,11 @@ class RotatingTexture(Texture):
     This allows every tile to be defined
     """
 
-    def __init__(self, texture: Union[List[List[float, float, Texture]], List[List[Texture]]], obj: GameObject = None):
+    def __init__(
+        self,
+        texture: Union[List[List[float, float, Texture]], List[List[Texture]]],
+        obj: "GameObject" = None,  # noqa: F821
+    ):
         """
         Angles are measured clockwise from directly upwards in degrees
 
@@ -186,7 +190,7 @@ class VariableTexture(Texture):
         middle: Union["VariableTexture", "SolidTexture"],
         edge: "SolidTexture",
         specific_edges: list = None,
-        obj: GameObject = None,
+        obj: "GameObject" = None,  # noqa: F821
     ):
         """Initialize a variable texture
 
@@ -214,7 +218,7 @@ class CompositeTexture(Texture):
         texture2: Texture,
         split_value: Union[float, int],
         vertically: bool = False,
-        obj: GameObject = None,
+        obj: "GameObject" = None,  # noqa: F821
     ):
         """
         All values are based on the object as if it was not rotated

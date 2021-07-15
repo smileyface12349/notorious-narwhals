@@ -3,7 +3,7 @@ import heapq
 from functools import total_ordering
 from typing import Any, List, NoReturn
 
-from datatypes import GameObject
+from .datatypes.game_object import GameObject
 
 
 @total_ordering
