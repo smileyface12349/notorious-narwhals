@@ -1,5 +1,6 @@
 import curses
 import heapq
+import math
 from functools import total_ordering
 from typing import Any, List, NoReturn
 
@@ -51,9 +52,41 @@ class BoxState:
     def update(self) -> NoReturn:
         """Updates the position of all objects. Should be called every tick"""
         vector_window_manager.update()
-        # TODO: Iterate through each object
-        #   For each object, work out which object(s) are touching it
-        #       Then, call object.update()
+
+        for obj in self.objects:
+            obj: GameObject
+            # TODO: Right now, this assumes the objects are rectangular. Could do with circles in here
+            #   It also does not (fully) support changing orientation
+            touching = []
+            for coll in self.objects:
+                coll: GameObject
+                if coll == obj:
+                    continue
+
+                # vertical collisions
+                if obj.position.y < coll.position.y:  # from above (check bottom edge of coll)
+                    result = obj.position.y <= coll.position.y + coll.size.y <= obj.position.y + obj.size.y
+                else:  # from below (check top edge of coll)
+                    result = obj.position.y <= coll.position.y <= obj.position.y + obj.size.y
+                # horizontal collisions
+                if not result:
+                    if obj.position.x < coll.position.x:  # from left (check right edge of coll)
+                        result = obj.position.x <= coll.position.x + coll.size.x <= obj.position.x + obj.size.x
+                    else:  # from right (check left edge of coll)
+                        result = obj.position.x <= coll.position.x <= obj.position.x + obj.size.x
+
+                if not result:  # if it hasn't collided, we're not interested
+                    continue
+
+                min_angle = 90 - math.degrees(
+                    math.atan((coll.position.y - obj.position.y) / (coll.position.x - obj.position.x))
+                )
+                max_angle = 90.0  # this has to be changed to support variable orientations
+                plane_normal = 0  # rectangles with no orientation are always flat
+
+                touching.append((min_angle, max_angle, coll, plane_normal))
+
+            obj.update(touching)
 
     def render(self, screen: curses.window) -> NoReturn:
         """Renders the contents of the box"""
