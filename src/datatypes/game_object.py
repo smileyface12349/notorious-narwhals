@@ -2,6 +2,8 @@ import math
 import typing
 from typing import List, NoReturn, Optional, Tuple, Union
 
+from datatypes.shape import Shape
+
 from .textures import EmptyTexture, Texture
 from .vector import Vector
 
@@ -15,7 +17,7 @@ class GameObject:
     def __init__(
         self,
         position: Vector = Vector(0, 0),
-        shape: int = 0,
+        shape: Shape = Shape.Rectangle,
         size: Vector = Vector(1, 1),
         orientation: float = 0,
         texture: Texture = EmptyTexture(),
