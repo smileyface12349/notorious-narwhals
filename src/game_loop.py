@@ -175,7 +175,7 @@ levels = {
     "Static Test": loaded_levels.static_test,
 }
 # Add you level here
-# Format: {"Display name", "Filename"}
+# Format: {"Display name", loaded_levels.filename}
 
 menus = {
     "start": Menu(
