@@ -78,7 +78,8 @@ class BoxState:
                 else:
                     draw = screen.addch
 
-                draw(pos.y, pos.x, char, colour)
+                if char != "TRANSPARENT":
+                    draw(pos.y, pos.x, char, colour)
 
     @staticmethod
     def _get_object_color(obj: GameObject) -> int:
