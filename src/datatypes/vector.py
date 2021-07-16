@@ -114,10 +114,13 @@ class Vector:
     @x.setter
     def x(self, value: float) -> None:
         """Adjusts all values equally to get the desired x value"""
-        scalar = value / self.x
-        self.constant_x *= scalar
-        self.relative_x *= scalar
-        self.ratio_x *= scalar
+        if self.x == 0:
+            self.constant_x = value
+        else:
+            scalar = value / self.x
+            self.constant_x *= scalar
+            self.relative_x *= scalar
+            self.ratio_x *= scalar
 
     def update_constant_x(self, value: float) -> None:
         """Adjusts only constant_x to get the desired x value"""
@@ -136,10 +139,13 @@ class Vector:
     @y.setter
     def y(self, value: float) -> None:
         """Adjusts all values equally to get the desired y value"""
-        scalar = value / self.y
-        self.constant_y *= scalar
-        self.relative_y *= scalar
-        self.ratio_y *= scalar
+        if self.y == 0:
+            self.constant_y = value
+        else:
+            scalar = value / self.y
+            self.constant_y *= scalar
+            self.relative_y *= scalar
+            self.ratio_y *= scalar
 
     def update_constant_y(self, value: float) -> None:
         """Adjusts only constant_y to get the desired y value"""
