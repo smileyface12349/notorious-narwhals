@@ -173,6 +173,7 @@ level_name = ""
 # fmt: off
 levels = {
     "Static Test": loaded_levels.static_test,
+    "Second Level": loaded_levels.second_level,
 }
 # Add you level here
 # Format: {"Display name", loaded_levels.filename}

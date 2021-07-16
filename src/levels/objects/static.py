@@ -3,6 +3,8 @@ import sys
 sys.path.append("..")
 
 from src.datatypes import GameObject  # noqa: E402
+from src.datatypes import Vector  # noqa: E402
+from src.datatypes.textures import SolidTexture  # noqa: E402
 
 
 class Wall(GameObject):
