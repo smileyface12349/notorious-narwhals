@@ -85,11 +85,24 @@ class AbstractAppLoop(ABC):
 class GameLoop(AbstractAppLoop):
     """Main game loop class. Entry point of the game."""
 
+    def __init__(self, screen: curses.window, window_manager: WindowManager, input_getter: InputGetter):
+        self.screen = screen
+        super().__init__(window_manager=window_manager, input_getter=input_getter)
+
     def _loop_step(self) -> Optional[int]:
         """Every call that is to be scheduled at each frame goes here"""
         exit_code = super()._loop_step()
-        # self.active_state_box.render()
+        self.box_state.update()
+        self.box_state.render(screen=self.screen)
         return exit_code
+
+    def _pre_loop(self) -> NoReturn:
+        """Called before the loop starts"""
+        super()._pre_loop()
+        # TODO: Level loading here
+        from levels.testing.static import level
+
+        self.box_state = level
 
 
 class MenuLoop(AbstractAppLoop):
@@ -217,7 +230,7 @@ def main(screen: curses.window) -> NoReturn:
     window_manager = WindowManager()
     input_getter = InputGetter(screen)
     menu_drawer = MenuLoop(screen, window_manager, input_getter)
-    loop = GameLoop(window_manager, input_getter)
+    loop = GameLoop(screen, window_manager, input_getter)
 
     menu = "start"
     while True:

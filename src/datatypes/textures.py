@@ -35,11 +35,20 @@ class Texture:
         self.buffer = []
 
         if not size:
-            size = self.object.size
+            if self.object:
+                size = self.object.size
+            else:
+                size = Vector(1, 1)
         if not orientation:
-            orientation = self.object.orientation
+            if self.object:
+                orientation = self.object.orientation
+            else:
+                orientation = 0
         if not position:
-            position = self.object.position
+            if self.object:
+                position = self.object.position
+            else:
+                position = Vector(0, 0)
 
         self.specific_render(position, size, orientation)
 
