@@ -1,4 +1,8 @@
-from src.datatypes import GameObject
+import sys
+
+sys.path.append("..")
+
+from src.datatypes import GameObject  # noqa: E402
 
 
 class Wall(GameObject):

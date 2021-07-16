@@ -1,8 +1,12 @@
-from src.box import BoxState
-from src.datatypes import Vector
-from src.datatypes.textures import SolidTexture
+import sys
 
-from ..objects.static import Wall
+from .objects.static import Wall
+
+sys.path.append("..")
+
+from src.box import BoxState  # noqa: E402
+from src.datatypes import Vector  # noqa: E402
+from src.datatypes.textures import SolidTexture  # noqa: E402
 
 objects = []
 
