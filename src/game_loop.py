@@ -7,7 +7,6 @@ from typing import NoReturn, Optional
 
 from datatypes import Menu
 from input_getter import InputGetter
-from src.box import BoxState
 from window_manager import WindowManager
 
 
@@ -101,7 +100,9 @@ class GameLoop(AbstractAppLoop):
         """Called before the loop starts"""
         super()._pre_loop()
         # TODO: Level loading here
-        self.box_state = BoxState()
+        from levels.testing.static import level
+
+        self.box_state = level
 
 
 class MenuLoop(AbstractAppLoop):

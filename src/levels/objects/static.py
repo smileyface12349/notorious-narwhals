@@ -1,4 +1,4 @@
-from ...datatypes import GameObject
+from src.datatypes import GameObject
 
 
 class Wall(GameObject):
