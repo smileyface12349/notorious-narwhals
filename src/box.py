@@ -50,6 +50,12 @@ class BoxState:
         """Adds an object to the objects list"""
         heapq.heappush(self.objects, obj)
 
+    def update(self) -> NoReturn:
+        """Updates the position of all objects. Should be called every tick"""
+        # TODO: Iterate through each object
+        #   For each object, work out which object(s) are touching it
+        #       Then, call object.update()
+
     def render(self, screen: curses.window) -> NoReturn:
         """Renders the contents of the box"""
         if len(self.objects) == 0:
