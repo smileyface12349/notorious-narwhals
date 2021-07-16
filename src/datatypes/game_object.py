@@ -213,3 +213,19 @@ class GameObject:
     def render(self) -> list:
         """A helper method to render the object"""
         return self.texture.render()
+
+    def __ge__(self, other: "GameObject") -> bool:
+        """Compares z value"""
+        return self.z >= other.z
+
+    def __gt__(self, other: "GameObject") -> bool:
+        """Compares z value"""
+        return self.z > other.z
+
+    def __le__(self, other: "GameObject") -> bool:
+        """Compares z value"""
+        return self.z <= other.z
+
+    def __lt__(self, other: "GameObject") -> bool:
+        """Compares z value"""
+        return self.z < other.z
