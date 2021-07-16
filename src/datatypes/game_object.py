@@ -69,7 +69,7 @@ class GameObject:
         """Updates the state of the object. Should be called every tick
 
         :param touching: A list of objects that are in contact with this object, and the angle they are from the
-        current object. In the format [min_angle, max_angle, object]. Used to detect collisions
+        current object. In the format [min_angle, max_angle, object, normal]. Used to detect collisions
         To signify the edge of the window, 0 should be put in place of the object
         :return:
         """
@@ -100,13 +100,13 @@ class GameObject:
         resultant: Vector = sum(self._forces)
         direction = self.velocity.direction
 
-        # This assumes that the resultant force is normal to the plane (which it often isn't)
-        if resultant.x >= 0:
-            plane_normal = 180 - direction
-        else:
-            plane_normal = direction - 180
-
-        obj = self.get_collision_object(direction=direction)
+        obj, plane_normal = self.get_collision_object(direction=direction)
+        if plane_normal is None:
+            # This assumes that the resultant force is normal to the plane (which it often isn't)
+            if resultant.x >= 0:
+                plane_normal = 180 - direction
+            else:
+                plane_normal = direction - 180
         if isinstance(obj, int):
             obj = GameObject(static=True, collision=[0])  # edge of the screen
         if obj is not None:
@@ -164,7 +164,7 @@ class GameObject:
         plus = part1 + part2
         minus = part1 - part2
 
-        collide = self.get_collision_object(plus.direction)
+        collide, _ = self.get_collision_object(plus.direction)
         if id(collide) == id(obj):  # still facing each other
             v_1_after = minus
         else:
@@ -174,18 +174,23 @@ class GameObject:
 
         return v_1_after, v_2_after
 
-    def get_collision_object(self, direction: float) -> Optional["GameObject"]:
+    def get_collision_object(self, direction: float) -> tuple[Optional["GameObject"], Optional[float]]:
         """Gets the first object that will collide with the current object given the direction of its velocity"""
-        for min_angle, max_angle, obj in self._touching:
+        for touching_object in self._touching:
+            if len(touching_object) == 3:
+                min_angle, max_angle, obj = touching_object
+                plane_normal = None
+            else:
+                min_angle, max_angle, obj, plane_normal = touching_object
             if min_angle > max_angle:
                 result = min_angle <= direction <= 360 or 0 <= direction <= max_angle
             else:
                 result = min_angle <= direction <= max_angle
             if result and self.shares_collision_group(obj):
-                return obj
+                return obj, plane_normal
 
         # nothing to collide with
-        return None
+        return None, None
 
     def shares_collision_group(self, obj: "GameObject") -> bool:
         """Checks if the current object should collide/interact with the given object"""
