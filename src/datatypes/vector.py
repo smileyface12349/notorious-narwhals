@@ -195,6 +195,13 @@ class Vector:
         new.y += other.y
         return new
 
+    def __radd__(self, other: int) -> "Vector":
+        """Add a vector to zero"""
+        if other == 0:
+            return self.copy()
+        else:
+            raise TypeError(f"Can't add Vector to {type(other)}")
+
     def __sub__(self, other: "Vector") -> "Vector":
         """Subtract two vectors"""
         new = self.copy()
