@@ -101,7 +101,7 @@ class GameObject:
 
     def process_collisions(self) -> NoReturn:
         """Handles the object colliding with any other objects"""
-        resultant: Vector = sum(self._forces)
+        resultant: Vector = sum(self._forces, start=Vector(0, 0))
         direction = self.velocity.direction
 
         obj, plane_normal = self.get_collision_object(direction=direction)
@@ -207,7 +207,7 @@ class GameObject:
 
     def calculate_acceleration(self) -> Vector:
         """Calculates the acceleration. Forces should already be calculated"""
-        self._resultant = sum(self._forces)
+        self._resultant = sum(self._forces, start=Vector(0, 0))
         self._acceleration = self._resultant / self.mass
         return self._acceleration
 
