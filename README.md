@@ -40,4 +40,6 @@ This game was created during the Python Summer Code Jam 2021 by the Notorious Na
 [SHIMI-W](https://github.com/SHIMI-W)  
 [smileyface12349](https://github.com/smileyface12349)  
 [smokeythemonkey](https://github.com/smokeythemonkey)  
-(In alphabetical order)
+(In alphabetical order)  
+
+Built using Python 3.9 standard library and [curses](https://docs.python.org/3/howto/curses.html)

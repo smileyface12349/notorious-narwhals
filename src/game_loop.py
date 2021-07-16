@@ -5,6 +5,7 @@ import time
 from abc import ABC
 from typing import NoReturn, Optional
 
+import levels as loaded_levels
 from datatypes import Menu
 from input_getter import InputGetter
 from window_manager import WindowManager
@@ -99,10 +100,7 @@ class GameLoop(AbstractAppLoop):
     def _pre_loop(self) -> NoReturn:
         """Called before the loop starts"""
         super()._pre_loop()
-        # TODO: Level loading here
-        from levels.testing.static import level
-
-        self.box_state = level
+        self.box_state = levels[level_name]
 
 
 class MenuLoop(AbstractAppLoop):
@@ -171,17 +169,25 @@ class MenuLoop(AbstractAppLoop):
         return super()._get_key_action(key)
 
 
+level_name = ""
 # fmt: off
+levels = {
+    "Static Test": loaded_levels.static_test,
+    "Second Level": loaded_levels.second_level,
+}
+# Add you level here
+# Format: {"Display name", loaded_levels.filename}
+
 menus = {
     "start": Menu(
         ["Title of the Game", "By the Notorious Narwhals"],
-        ["Play", "Select Level", "How to play", "About", "Settings", "Exit"],
-        ["loop", "levels", "help", "about", "settings", ExitCodes.STOP],
+        ["Play", "How to play", "About", "Settings", "Exit"],
+        ["levels", "help", "about", "settings", ExitCodes.STOP],
     ),
     "levels": Menu(
-        ["Not implemented yet"],
-        ["Back"],
-        ["start"],
+        ["Select Level"],
+        list(levels.keys()) + ["Back"],
+        list(map(lambda x: "level:" + str(x), levels.keys())) + ["start"],
     ),
     "help": Menu(
         ["Paste here a nice explanation", "how to play the game"],
@@ -216,8 +222,8 @@ menus = {
     "pause": Menu(
         ["Paused"],
         ["Continue", "Settings", "Menu", "Exit"],
-        ["loop", "settings_paused", "start", ExitCodes.STOP]
-    )
+        ["level:" + level_name, "settings_paused", "start", ExitCodes.STOP]
+    ),
 }
 # fmt: on
 
@@ -242,7 +248,9 @@ def main(screen: curses.window) -> NoReturn:
             break
         menu_drawer.selected_index = 0
 
-        if menu == "loop":
+        if menu.startswith("level:"):
+            global level_name
+            level_name = menu.split(":", 1)[1]
             loop_return = loop.start()
             if loop_return == ExitCodes.STOP:
                 break

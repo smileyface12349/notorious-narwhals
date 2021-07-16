@@ -1,14 +1,13 @@
 from math import sqrt
-from typing import NoReturn
-from typing.abc import Callable
+from typing import Any, NoReturn
 
-from datatypes.vector import Vector
+from .vector import Vector
 
 
 class Drawer:
     """Draws vector shapes on the screen"""
 
-    def __init__(self, buffer_add: Callable[[Vector, str, int], NoReturn]):
+    def __init__(self, buffer_add: Any):
         self.buffer_add = buffer_add
 
     def draw_tile(self, pos: Vector, char: str, colour: int) -> NoReturn:

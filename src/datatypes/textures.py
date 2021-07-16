@@ -1,15 +1,10 @@
-import sys
 from typing import List, NoReturn, Tuple, Union
 
-from shape import Shape
-
 from .raster_drawer import Drawer
+from .shape import Shape
+from .vector import Vector
 
-sys.path.append("..")
-
-# from .game_object import GameObject  # noqa: E402
-
-from .vector import Vector  # noqa: E402
+# from .game_object import GameObject
 
 
 class Texture:
