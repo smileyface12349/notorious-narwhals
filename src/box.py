@@ -60,17 +60,17 @@ class BoxState:
         if len(self.objects) == 0:
             return  # There is nothing to render!
 
+        screen.clear()
         for obj in self.objects:
             self._render_object(obj, screen)
-
-        # screen.update() ?
+        screen.refresh()
 
     def _render_object(self, obj: GameObject, screen: curses.window) -> NoReturn:
         """
         Renders object on the screen (character-by-character)
 
         It doesn't affect performance because curses draws all the stuff at once
-        when screen.update() is called (or when .getkey() / .getch() is called)
+        when screen.refresh() is called (or when .getkey() / .getch() is called)
         """
         # color = self._get_object_color(obj)
 
