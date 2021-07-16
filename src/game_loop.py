@@ -100,9 +100,6 @@ class GameLoop(AbstractAppLoop):
     def _pre_loop(self) -> NoReturn:
         """Called before the loop starts"""
         super()._pre_loop()
-        f = open("log.txt", "w")  # TODO
-        f.write(str([level_name]))
-        f.close()
         self.box_state = levels[level_name]
 
 
