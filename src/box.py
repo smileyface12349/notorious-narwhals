@@ -4,6 +4,7 @@ from functools import total_ordering
 from typing import Any, List, NoReturn
 
 from .datatypes.game_object import GameObject
+from .datatypes.vector import window_manager as vector_window_manager
 
 
 @total_ordering
@@ -15,9 +16,6 @@ class ZSortMixin:
     def __lt__(self, other: Any):
         """Lesser then cmp function"""
         return self.z < other.z
-
-
-# Import GameObject class when it is done
 
 
 def init_colors() -> NoReturn:
@@ -52,6 +50,7 @@ class BoxState:
 
     def update(self) -> NoReturn:
         """Updates the position of all objects. Should be called every tick"""
+        vector_window_manager.update()
         # TODO: Iterate through each object
         #   For each object, work out which object(s) are touching it
         #       Then, call object.update()
@@ -85,7 +84,7 @@ class BoxState:
                     draw = screen.addch
 
                 if char != "TRANSPARENT":
-                    draw(pos.y, pos.x, char, colour)
+                    draw(int(pos.y), int(pos.x), char, colour)
 
     @staticmethod
     def _get_object_color(obj: GameObject) -> int:
