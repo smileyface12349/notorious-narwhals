@@ -1,6 +1,10 @@
 import sys
 from typing import List, NoReturn, Tuple, Union
 
+from shape import Shape
+
+from .raster_drawer import Drawer
+
 sys.path.append("..")
 
 # from .game_object import GameObject  # noqa: E402
@@ -24,8 +28,11 @@ class Texture:
         """
         self.object = obj
         self.buffer = []  # buffer of tiles to be rendered, refreshed each frame
+        self.drawer = Drawer(self._buffer_tile)
 
-    def render(self, position: Vector = None, size: Vector = None, orientation: float = None) -> list:
+    def render(
+        self, position: Vector = None, size: Vector = None, orientation: float = None, override_shape: Shape = None
+    ) -> list:
         """Outputs the texture in a format ready to render
 
         Takes into account the position, size and orientation of the object
@@ -50,11 +57,13 @@ class Texture:
             else:
                 position = Vector(0, 0)
 
-        self.specific_render(position, size, orientation)
+        self.specific_render(position, size, orientation, override_shape)
 
         return self.buffer
 
-    def specific_render(self, position: Vector, size: Vector, orientation: float) -> NoReturn:
+    def specific_render(
+        self, position: Vector, size: Vector, orientation: float, override_shape: Shape = None
+    ) -> NoReturn:
         """Render method specific to a type of texture
 
         Populates self.buffer by calling self._buffer_tile()
@@ -85,12 +94,21 @@ class SolidTexture(Texture):
         self.char = char
         self.colour = colour
 
-    def specific_render(self, position: Vector, size: Vector, orientation: float) -> NoReturn:
+    def specific_render(
+        self, position: Vector, size: Vector, orientation: float, override_shape: Shape = None
+    ) -> NoReturn:
         """Render a solid texture"""
-        for x in range(round(size.x)):
-            for y in range(round(size.y)):
-                draw_pos = Vector(round(position.x + x), round(position.y + y))
-                self._buffer_tile(draw_pos, self.char, self.colour)
+        drawshape = self.object.shape if override_shape is not None else override_shape
+        # Look at that clean inline if statement
+
+        if drawshape == Shape.Rectangle:
+            self.drawer.draw_rect(position, size, self.char, self.colour)
+        elif drawshape == Shape.Line:
+            self.drawer.draw_line(position, size, self.char, self.colour)
+        elif drawshape == Shape.Circle:
+            self.drawer.draw_circle(position, size.x, self.char, self.colour)
+        elif drawshape == Shape.Triangle:
+            raise NotImplementedError("Triangles are too powerful to be drawn! (not yet implemented)")
 
 
 class EmptyTexture(SolidTexture):
