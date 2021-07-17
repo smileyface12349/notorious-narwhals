@@ -1,10 +1,10 @@
 from collections import namedtuple
 
-Position = namedtuple("Position", ["x", "y"])
-Size = namedtuple("Size", ["width", "height"])
-Rectangle = namedtuple("Rectangle", ["x1", "y1", "x2", "y2"])
-Edges = namedtuple("Corners", ["left", "top", "right", "bottom"])
-Color = namedtuple("Color", ["fg", "bg"])
+# Position = namedtuple("Position", ["x", "y"])
+# Size = namedtuple("Size", ["width", "height"])
+# Rectangle = namedtuple("Rectangle", ["x1", "y1", "x2", "y2"])
+# Edges = namedtuple("Corners", ["left", "top", "right", "bottom"])
+# Color = namedtuple("Color", ["fg", "bg"])
 Menu = namedtuple("Menu", ["text_lines", "options", "options_actions"])
 
 from .game_object import GameObject  # noqa: F401 E402

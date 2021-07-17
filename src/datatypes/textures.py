@@ -26,7 +26,7 @@ class Texture:
         self.drawer = Drawer(self._buffer_tile)
 
     def render(
-        self, position: Vector = None, size: Vector = None, orientation: float = None, override_shape: Shape = None
+        self, position: Vector = None, size: Vector = None, orientation: float = None, shape: Shape = None
     ) -> list:
         """Outputs the texture in a format ready to render
 
@@ -51,14 +51,17 @@ class Texture:
                 position = self.object.position
             else:
                 position = Vector(0, 0)
+        if not shape:
+            if self.object:
+                shape = self.object.shape
+            else:
+                shape = Shape.Rectangle
 
-        self.specific_render(position, size, orientation, override_shape)
+        self.specific_render(position, size, orientation, shape)
 
         return self.buffer
 
-    def specific_render(
-        self, position: Vector, size: Vector, orientation: float, override_shape: Shape = None
-    ) -> NoReturn:
+    def specific_render(self, position: Vector, size: Vector, orientation: float, shape: Shape) -> NoReturn:
         """Render method specific to a type of texture
 
         Populates self.buffer by calling self._buffer_tile()
@@ -89,20 +92,18 @@ class SolidTexture(Texture):
         self.char = char
         self.colour = colour
 
-    def specific_render(
-        self, position: Vector, size: Vector, orientation: float, override_shape: Shape = None
-    ) -> NoReturn:
+    def specific_render(self, position: Vector, size: Vector, orientation: float, shape: Shape) -> NoReturn:
         """Render a solid texture"""
-        drawshape = self.object.shape if override_shape is not None else override_shape
-        # Look at that clean inline if statement
-
-        if drawshape == Shape.Rectangle:
-            self.drawer.draw_rect(position, size, self.char, self.colour)
-        elif drawshape == Shape.Line:
+        if shape == shape.Rectangle:
+            for x in range(round(position.x), round(position.x + size.x), 1):
+                for y in range(round(position.y), round(position.y + size.y), 1):
+                    self._buffer_tile(Vector(x, y), self.char, self.colour)
+        elif shape == Shape.Line:
+            # TODO: Do we really need to go into a separate class?
             self.drawer.draw_line(position, size, self.char, self.colour)
-        elif drawshape == Shape.Circle:
-            self.drawer.draw_circle(position, size.x, self.char, self.colour)
-        elif drawshape == Shape.Triangle:
+        elif shape == Shape.Circle:
+            self.drawer.draw_circle(position, size.x / 2, self.char, self.colour)
+        elif shape == Shape.Triangle:
             raise NotImplementedError("Triangles are too powerful to be drawn! (not yet implemented)")
 
 

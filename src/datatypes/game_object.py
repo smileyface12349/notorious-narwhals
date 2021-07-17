@@ -1,14 +1,17 @@
 import math
+import sys
 import typing
 from typing import List, NoReturn, Optional, Tuple, Union
 
-from datatypes.shape import Shape
+sys.path.append("..")
 
-from .textures import EmptyTexture, Texture
-from .vector import Vector
+from src.datatypes.shape import Shape  # noqa: E402
+
+from .textures import EmptyTexture, Texture  # noqa: E402
+from .vector import Vector  # noqa: E402
 
 if typing.TYPE_CHECKING:
-    from .triggers import Triggers
+    from .triggers import Triggers  # noqa: E402
 
 
 class GameObject:
@@ -29,7 +32,7 @@ class GameObject:
         triggers: "Triggers" = None,
         collision: List[int] = None,
         z: int = 0,
-        gravity: Vector = Vector(0, -0.49),
+        gravity: Vector = Vector(0, 0.03),
         static: bool = False,
         initial_forces: List[Vector] = None,
     ):
@@ -77,16 +80,17 @@ class GameObject:
         To signify the edge of the window, 0 should be put in place of the object
         :return:
         """
-        if touching is None:
-            touching = []
+        if not self.static:
+            if touching is None:
+                touching = []
 
-        self._touching = touching
+            self._touching = touching
 
-        self.calculate_forces()
-        self.calculate_acceleration()
+            self.calculate_forces()
+            self.calculate_acceleration()
 
-        self.velocity += self._acceleration
-        self.position += self.velocity
+            self.velocity += self._acceleration
+            self.position += self.velocity
 
     def calculate_forces(self) -> List[Vector]:
         """Gets a full list of forces acting on the object during this tick"""

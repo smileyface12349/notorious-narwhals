@@ -53,6 +53,8 @@ class BoxState:
         """Updates the position of all objects. Should be called every tick"""
         vector_window_manager.update()
 
+        f = open("log.txt", "a")
+
         for obj in self.objects:
             obj: GameObject
             # TODO: Right now, this assumes the objects are rectangular. Could do with circles in here
@@ -76,6 +78,7 @@ class BoxState:
                         result = obj.position.x <= coll.position.x <= obj.position.x + obj.size.x
 
                 if not result:  # if it hasn't collided, we're not interested
+                    f.writelines(["no collision\n"])
                     continue
 
                 min_angle = 90 - math.degrees(
@@ -86,7 +89,10 @@ class BoxState:
 
                 touching.append((min_angle, max_angle, coll, plane_normal))
 
+            f.writelines([f"{obj} - {touching}\n"])
             obj.update(touching)
+
+        f.close()
 
     def render(self, screen: curses.window) -> NoReturn:
         """Renders the contents of the box"""
