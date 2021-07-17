@@ -119,17 +119,21 @@ class GameObject:
             obj = GameObject(static=True, collision=[0])  # edge of the screen
         if obj is not None:
             if obj.static:  # apply a normal reaction force
-                reaction = -resultant
-                movement_force = -resultant
+                if self.elasticity == 0:
+                    reaction = -resultant
+                    movement_force = -resultant
 
-                # Resolve into two separate forces
-                angle_to_normal = (direction - plane_normal) % 90
-                reaction *= math.cos(math.radians(angle_to_normal))
-                movement_force *= math.sin(math.radians(angle_to_normal))
+                    # Resolve into two separate forces
+                    angle_to_normal = (direction - plane_normal) % 90
+                    reaction *= math.cos(math.radians(angle_to_normal))
+                    movement_force *= math.sin(math.radians(angle_to_normal))
 
-                self.add_temp_force(reaction)  # this negates the resultant force
-                self.add_temp_force(-self.velocity * self.mass)  # this will decelerate the object to 0
-                self.process_friction(obj=obj, reaction=reaction, force=movement_force)
+                    self.add_temp_force(reaction)  # this negates the resultant force
+                    self.add_temp_force(-self.velocity * self.mass)  # this will decelerate the object to 0
+                    self.process_friction(obj=obj, reaction=reaction, force=movement_force)
+                else:
+                    new_velocity = -self.velocity * math.sqrt(self.elasticity)  # in terms of kinetic energy
+                    self.velocity = new_velocity
             else:  # move the object
                 v_1, v_2 = self.calculate_velocity_after_collision(obj=obj)
                 self.velocity = v_1
