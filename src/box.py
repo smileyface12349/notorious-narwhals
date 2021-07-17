@@ -67,15 +67,15 @@ class BoxState:
 
                 # vertical collisions
                 if obj.position.y < coll.position.y:  # from above (check bottom edge of coll)
-                    result = obj.position.y <= coll.position.y + coll.size.y <= obj.position.y + obj.size.y
-                else:  # from below (check top edge of coll)
                     result = obj.position.y <= coll.position.y <= obj.position.y + obj.size.y
+                else:  # from below (check top edge of coll)
+                    result = obj.position.y <= coll.position.y + coll.size.y <= obj.position.y + obj.size.y
                 # horizontal collisions
                 if not result:
                     if obj.position.x < coll.position.x:  # from left (check right edge of coll)
-                        result = obj.position.x <= coll.position.x + coll.size.x <= obj.position.x + obj.size.x
-                    else:  # from right (check left edge of coll)
                         result = obj.position.x <= coll.position.x <= obj.position.x + obj.size.x
+                    else:  # from right (check left edge of coll)
+                        result = obj.position.x <= coll.position.x + coll.size.x <= obj.position.x + obj.size.x
 
                 if not result:  # if it hasn't collided, we're not interested
                     f.writelines(["no collision\n"])
