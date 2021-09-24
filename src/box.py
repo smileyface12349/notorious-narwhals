@@ -50,6 +50,7 @@ class BoxState:
     def add_object(self, obj: GameObject) -> NoReturn:
         """Adds an object to the objects list"""
         heapq.heappush(self.objects, obj)
+        space.add(obj.body, obj.poly)
 
     def update(self) -> NoReturn:
         """Updates the position of all objects. Should be called every tick"""

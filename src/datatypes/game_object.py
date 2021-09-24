@@ -57,9 +57,14 @@ class GameObject:
         self.elasticity = elasticity
         self.friction = friction
         self.z = z
+        self.mass = mass
 
         self.body = pymunk.Body()
         self.body.position = (self.position.x, self.position.y)
+
+        if self.shape == Shape.Rectangle:
+            self.poly = pymunk.Poly.create_box(self.body)
+            self.poly.mass = self.mass
 
     def update(self) -> NoReturn:
         """Updates the state of the object. Should be called every tick"""
