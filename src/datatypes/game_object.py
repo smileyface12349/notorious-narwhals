@@ -1,5 +1,4 @@
 import sys
-import typing
 from typing import NoReturn
 
 import pymunk
@@ -42,6 +41,10 @@ class GameObject:
         if self.shape == Shape.Rectangle:
             self.poly = pymunk.Poly.create_box(self.body, (self.size.x, self.size.y))
             self.poly.mass = self.mass
+        elif self.shape == Shape.Circle:
+            self.poly = pymunk.Circle(self.body, self.size.x)
+        elif self.shape == Shape.Triangle:
+            raise NotImplementedError("Triangles are not yet implemented!")
 
     def update(self) -> NoReturn:
         """Updates the state of the object. Should be called every tick"""
