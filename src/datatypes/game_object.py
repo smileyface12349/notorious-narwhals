@@ -40,7 +40,7 @@ class GameObject:
         self.body.position = (self.position.x, self.position.y)
 
         if self.shape == Shape.Rectangle:
-            self.poly = pymunk.Poly.create_box(self.body)
+            self.poly = pymunk.Poly.create_box(self.body, (self.size.x, self.size.y))
             self.poly.mass = self.mass
 
     def update(self) -> NoReturn:
