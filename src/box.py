@@ -35,6 +35,8 @@ class BoxState:
 
     def __init__(self, initial_objects: List[GameObject] = None):
         self.objects = []
+        self.space = pymunk.Space()
+        self.space.gravity = (0, -9.81)
 
         if initial_objects is not None:
             # Sorting objects initially to avoid sorting when rendering

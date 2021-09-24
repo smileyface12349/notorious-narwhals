@@ -3,6 +3,8 @@ import sys
 import typing
 from typing import List, NoReturn, Optional, Tuple, Union
 
+import pymunk
+
 sys.path.append("..")
 
 from src.datatypes.shape import Shape  # noqa: E402
@@ -55,6 +57,9 @@ class GameObject:
         self.elasticity = elasticity
         self.friction = friction
         self.z = z
+
+        self.body = pymunk.Body()
+        self.body.position = (self.position.x, self.position.y)
 
     def update(self) -> NoReturn:
         """Updates the state of the object. Should be called every tick"""
