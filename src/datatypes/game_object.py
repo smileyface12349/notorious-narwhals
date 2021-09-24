@@ -24,29 +24,12 @@ class GameObject:
         shape: Shape = Shape.Rectangle,
         size: Vector = Vector(1, 1),
         orientation: float = 0,
-        texture: Texture = EmptyTexture(),
         elasticity: float = 0,
         friction: float = 0,
         mass: float = 1,
-        velocity: Vector = Vector(0, 0),
-        forces: List[Vector] = None,
-        triggers: "Triggers" = None,
-        collision: List[int] = None,
         z: int = 0,
-        gravity: Vector = Vector(0, 0.03),
-        static: bool = False,
-        initial_forces: List[Vector] = None,
     ):
         """Initialize a new game object"""
-        # Replacing mutable default arguments
-        if collision is None:
-            collision = [1]
-        if triggers is None:
-            triggers = []
-        if forces is None:
-            forces = []
-        if initial_forces is None:
-            forces = []
 
         # These attributes stay the same between game ticks
         self.position = position
