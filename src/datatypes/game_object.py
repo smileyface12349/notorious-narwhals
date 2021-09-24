@@ -1,6 +1,6 @@
 import sys
 import typing
-from typing import List, NoReturn
+from typing import NoReturn
 
 import pymunk
 
@@ -8,11 +8,7 @@ sys.path.append("..")
 
 from src.datatypes.shape import Shape  # noqa: E402
 
-from .textures import EmptyTexture, Texture  # noqa: E402
 from .vector import Vector  # noqa: E402
-
-if typing.TYPE_CHECKING:
-    from .triggers import Triggers  # noqa: E402
 
 
 class GameObject:
@@ -30,7 +26,6 @@ class GameObject:
         z: int = 0,
     ):
         """Initialize a new game object"""
-
         # These attributes stay the same between game ticks
         self.position = position
         self.shape = shape
