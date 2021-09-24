@@ -1,7 +1,6 @@
-import math
 import sys
 import typing
-from typing import List, NoReturn, Optional, Tuple, Union
+from typing import List, NoReturn
 
 import pymunk
 
