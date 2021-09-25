@@ -7,6 +7,7 @@ sys.path.append("..")
 
 from src.datatypes.shape import Shape  # noqa: E402
 
+from .raster_drawer import Drawer  # noqa: E402
 from .vector import Vector  # noqa: E402
 
 
@@ -23,6 +24,8 @@ class GameObject:
         friction: float = 0,
         mass: float = 1,
         z: int = 0,
+        char: str,
+        colour: int
     ):
         """Initialize a new game object"""
         # These attributes stay the same between game ticks
@@ -34,6 +37,9 @@ class GameObject:
         self.friction = friction
         self.z = z
         self.mass = mass
+
+        self.char = char
+        self.colour = colour
 
         self.body = pymunk.Body()
         self.body.position = (self.position.x, self.position.y)
@@ -51,7 +57,17 @@ class GameObject:
 
     def render(self) -> list:
         """A helper method to render the object"""
-        return self.texture.render()
+        buffer = []
+
+        def buffer_add(pos, char, col):
+            buffer.append((pos, char, col))
+
+        self.drawer = Drawer(buffer_add)  # Raster drawer
+        
+        if self.shape == shape.Rectangle:
+            self.drawer.draw_rect(Vector(*(self.body.position)), self.size, self.char, self.colour)
+        elif self.shape == shape.Circle:
+            self.drawer.draw_circle(Vector(*(self.body.position)), self.size.x, self.char, self.colour)
 
     def __ge__(self, other: "GameObject") -> bool:
         """Compares z value"""
