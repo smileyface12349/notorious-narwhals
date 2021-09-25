@@ -60,14 +60,14 @@ class GameObject:
         """A helper method to render the object"""
         buffer = []
 
-        def buffer_add(pos, char, col):
+        def buffer_add(pos: Vector, char: str, col: int) -> NoReturn:
             buffer.append((pos, char, col))
 
         self.drawer = Drawer(buffer_add)  # Raster drawer
 
-        if self.shape == shape.Rectangle:
+        if self.shape == Shape.Rectangle:
             self.drawer.draw_rect(Vector(*(self.body.position)), self.size, self.char, self.colour)
-        elif self.shape == shape.Circle:
+        elif self.shape == Shape.Circle:
             self.drawer.draw_circle(Vector(*(self.body.position)), self.size.x, self.char, self.colour)
 
     def __ge__(self, other: "GameObject") -> bool:
