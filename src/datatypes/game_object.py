@@ -23,9 +23,10 @@ class GameObject:
         elasticity: float = 0,
         friction: float = 0,
         mass: float = 1,
+        static: bool = False,
         z: int = 0,
-        char: str,
-        colour: int
+        char: str = "#",
+        colour: int = 0,
     ):
         """Initialize a new game object"""
         # These attributes stay the same between game ticks
@@ -63,7 +64,7 @@ class GameObject:
             buffer.append((pos, char, col))
 
         self.drawer = Drawer(buffer_add)  # Raster drawer
-        
+
         if self.shape == shape.Rectangle:
             self.drawer.draw_rect(Vector(*(self.body.position)), self.size, self.char, self.colour)
         elif self.shape == shape.Circle:
