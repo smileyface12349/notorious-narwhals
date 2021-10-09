@@ -1,8 +1,9 @@
 import curses
 import heapq
-import math
 from functools import total_ordering
 from typing import Any, List, NoReturn
+
+import pymunk
 
 from .datatypes.game_object import GameObject
 from .datatypes.vector import window_manager as vector_window_manager
@@ -50,7 +51,7 @@ class BoxState:
     def add_object(self, obj: GameObject) -> NoReturn:
         """Adds an object to the objects list"""
         heapq.heappush(self.objects, obj)
-        space.add(obj.body, obj.poly)
+        self.space.add(obj.body, obj.poly)
 
     def update(self) -> NoReturn:
         """Updates the position of all objects. Should be called every tick"""

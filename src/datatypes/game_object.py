@@ -56,7 +56,7 @@ class GameObject:
     def update(self) -> NoReturn:
         """Updates the state of the object. Should be called every tick"""
 
-    def render(self) -> list:
+    def render(self) -> NoReturn:
         """A helper method to render the object"""
         buffer = []
 
