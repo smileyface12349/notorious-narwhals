@@ -8,6 +8,4 @@ from collections import namedtuple
 Menu = namedtuple("Menu", ["text_lines", "options", "options_actions"])
 
 from .game_object import GameObject  # noqa: F401 E402
-from .textures import EmptyTexture as EmptyTexture  # noqa: F401 E402
-from .textures import Texture as Texture  # noqa: F401 E402
 from .vector import Vector as Vector  # noqa: F401 E402
